@@ -10,9 +10,15 @@ const CompanySchema=new mongoose.Schema({
         required:true
     },
     Jobs:{
-        type:String,
-        required:true
+        type:[mongoose.SchemaType.ObjectId],
+        ref:"Job"
     },
+    address:{
+        type:String,
+        reuired:true,
+        minLength:50
+    },
+
     email:{
         type:String,
         required:true,
