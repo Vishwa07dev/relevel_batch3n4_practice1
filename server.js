@@ -35,6 +35,9 @@ async function initSeedData(){
         const job1 = await jobModel.create({
             jobTitle : "SDE",
         })
+        const job2 = await jobModel.create({
+            jobTitle : "QA",
+        })
 
         const company1 = await companyModel.create({
             companyname : "Relevel"
