@@ -2,9 +2,8 @@ const express = require('express');
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
+const dotenv = require("dotenv");
 
-const serverConfig = require('./config/server.config');
-const dbConfig = require("./config/db.config");
 const User = require('./models/user.model')
 const Jobs = require('./models/job.model')
 const Companies = require('./models/company.model')
@@ -13,8 +12,9 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+dotenv.config();
 
-mongoose.connect(dbConfig.DB_URL);
+mongoose.connect(process.env.DB_URL);
 const db = mongoose.connection;
 db.on("error", () => {
     console.log("Error while connecting to MongoDB");
@@ -50,7 +50,7 @@ db.once("open", async () => {
     console.log("Connected to mongoDB");
 });
 
-const PORT = serverConfig.PORT;
+const PORT = process.env.PORT;
 
 module.exports = app.listen(PORT, () => {
     console.log(`Server started at port ${PORT}`);
