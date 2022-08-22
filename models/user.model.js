@@ -21,6 +21,14 @@ const userSchema = new mongoose.Schema({
         minLength : 10,
         unique : true
     },
+    jobsApplied : {
+        type : [mongoose.SchemaTypes.String],
+        ref : "job"
+    },
+    companiesAppliedFor : {
+        type : [mongoose.SchemaTypes.String],
+        ref : "company",
+    },
     createdAt : {
         type : Date,
         immutable : true,
@@ -30,10 +38,6 @@ const userSchema = new mongoose.Schema({
         type : Date,
         default : () => Date.now()
     },
-    jobsApplied : {
-        type : [mongoose.SchemaTypes.objectId],
-        ref : "job"
-    }
 })
 
 module.exports = mongoose.model("user",userSchema);

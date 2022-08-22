@@ -5,8 +5,15 @@ const jobSchema = new mongoose.Schema({
         type : String,
         required : true
     },
+    jobBelongsTo : { // company name to which this job belongs to.
+        type : String,
+        require : true,
+    },
+    jobDescription : {
+        type : String,
+    },
     jobSeekers : {
-        type : [mongoose.SchemaTypes.objectId],
+        type : [mongoose.SchemaTypes.String],
         ref : "user"
     }
 })
