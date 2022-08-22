@@ -12,13 +12,16 @@ const userSchema = new mongoose.Schema({
         type : String,
         required : true
     },
-    job : {
+    password : {
         type : String,
         required : true
     },
-    company : {
+    email : {
         type : String ,
-        required : true
+        required : true,
+        lowercase : true,
+        minLength : 10,
+        unique : true
     },
     createdAt : {
         type : Date,
