@@ -36,11 +36,11 @@ const userSchema = new mongoose.Schema({
             constant.userTypes.admin
         ]
     },
-    jobApplied: {
+    jobsApplied: {
         type: [mongoose.SchemaTypes.ObjectId], 
         ref: "jobs"
     },
-    jobPosted: {
+    jobsPosted: {
         type: [mongoose.SchemaTypes.ObjectId], 
         ref: "jobs"
     }

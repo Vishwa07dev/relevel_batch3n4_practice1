@@ -10,12 +10,16 @@ const jobSchema = new mongoose.Schema({
         required: true
     },
     postedBy: {
-        type: String,
-        required: true,
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "users",
     },
-    companyName: {
-        type: String,
-        required: true
+    companyId: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "companies"
+    },
+    appliedUsersId:{
+        type: [mongoose.SchemaTypes.ObjectId],
+        ref: "users"
     },
     skills: {
         type: [],

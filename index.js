@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require("mongoose");
-const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const dotenv = require("dotenv");
 
@@ -11,7 +10,6 @@ const Companies = require('./models/company.model')
 const app = express();
 
 app.use(express.json());
-app.use(cors());
 dotenv.config();
 
 mongoose.connect(process.env.DB_URL);
@@ -41,12 +39,20 @@ db.once("open", async () => {
 
     // CREATE Companies
     await Companies.collection.drop();
-    await Companies.create({
+    const company = await Companies.create({
         companyName: 'ABC',
         description: 'ABC Job',
         jobs: [job._id],
         email: 'abc@abc.com',
     });
+
+    user.jobsPosted.push(job._id);
+    await user.save();
+
+    job.companyId = company._id;
+    await job.save();
+
+
     console.log("Connected to mongoDB");
 });
 
