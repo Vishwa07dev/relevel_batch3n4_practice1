@@ -7,14 +7,10 @@ const jobSchema = new mongoose.Schema({
         required : true
     },
     companyName : {
-        type : String,
-        required : true
+        type : mongoose.SchemaType.ObjectId,
+        ref : "Company"
     },
     description : {
-        type : String,
-        required : true
-    },
-    lastDateOfApply : {
         type : String,
         required : true
     },

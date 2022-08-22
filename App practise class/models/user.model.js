@@ -44,6 +44,10 @@ const userSchema = new mongoose.Schema({
     jobsApplied : {
         type : [mongoose.SchemaType.ObjectId],
         ref : 'Job'
+    },
+    jobsPosted : {
+        type : [mongoose.SchemaType.ObjectId],
+        ref : "Job"
     }
 })
 

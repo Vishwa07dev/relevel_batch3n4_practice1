@@ -48,9 +48,7 @@ async function init(){
 
         const jobObj = {
             title : "This is a new Job",
-            companyName : "xyz",
-            description : "abc",
-            lastDateOfApply : "12-12-2022",
+            description : "abc"
         }
 
         const job = await Job.create(jobObj)
@@ -58,7 +56,6 @@ async function init(){
         const companyObj = {
             name : "xyz",
             description : "hello this is a company",
-            location : "Delhi"
         }
 
         const company = await Company.create(companyObj)
