@@ -5,10 +5,10 @@ const companySchema = new mongoose.Schema({
         type : String,
         required : true
     },
-    // jobsAvailable : {
-    //     type : [mongoose.SchemaTypes.objectId],
-    //     ref : "Ticket"
-    // }
+    jobsAvailabe : {
+        type : [mongoose.SchemaTypes.objectId],
+        ref : "job"
+    }
 })
 
 module.exports = mongoose.model("company",companySchema);

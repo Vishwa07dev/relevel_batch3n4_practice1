@@ -31,16 +31,38 @@ async function initSeedData(){
             password : bcrypt.hashSync("userpassword", 8),
             email : "user1@gmail.com",
         });
+        const user2 = await userModel.create({
+            username : "user2",
+            userId : "u2",
+            password : bcrypt.hashSync("userpassword", 8),
+            email : "user2@gmail.com",
+        });
+        const user3 = await userModel.create({
+            username : "user3",
+            userId : "u3",
+            password : bcrypt.hashSync("userpassword", 8),
+            email : "user3@gmail.com",
+        });
 
         const job1 = await jobModel.create({
             jobTitle : "SDE",
+            // jobSeekers : ''
         })
         const job2 = await jobModel.create({
-            jobTitle : "QA",
+            jobTitle : "SE",
+        })        
+        const job3 = await jobModel.create({
+            jobTitle : "HR",
+        })        
+        const job4 = await jobModel.create({
+            jobTitle : "Manager",
         })
 
         const company1 = await companyModel.create({
             companyname : "Relevel"
+        })
+        const company2 = await companyModel.create({
+            companyname : "Unacademy"
         })
     }
     catch(err){

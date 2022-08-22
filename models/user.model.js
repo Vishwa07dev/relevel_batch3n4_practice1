@@ -10,10 +10,10 @@ const userSchema = new mongoose.Schema({
         required : true,
         unique : true
     },
-    // password : {
-    //     type : String,
-    //     required : true
-    // },
+    password : {
+        type : String,
+        required : true
+    },
     email : {
         type : String,
         required : true,
@@ -30,10 +30,10 @@ const userSchema = new mongoose.Schema({
         type : Date,
         default : () => Date.now()
     },
-    // jobsApplied : {
-    //     type : [mongoose.SchemaTypes.objectId],
-    //     ref : "Job"
-    // }
+    jobsApplied : {
+        type : [mongoose.SchemaTypes.objectId],
+        ref : "job"
+    }
 })
 
 module.exports = mongoose.model("user",userSchema);
