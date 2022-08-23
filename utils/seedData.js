@@ -3,7 +3,7 @@ const constants = require("../utils/constants.utils");
 const companySeedData = [
   {
     name: "Koogle",
-    companyDetails:
+    companyDescription:
       "Software company , we cereate New And Exciting  technologuy for the world",
 
     contactNo: "000100111",
@@ -11,7 +11,7 @@ const companySeedData = [
   },
   {
     name: "yazoo",
-    companyDetails: "We are aiming for global peace by 2050",
+    companyDescription: "We are aiming for global peace by 2050",
 
     contactNo: "000800118",
     emailId: "yazoo12koogle.com",

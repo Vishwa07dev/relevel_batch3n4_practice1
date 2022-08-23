@@ -25,6 +25,10 @@ async function init() {
   try {
     await User.insertMany(seedData.UserData);
     console.log("Data entered into user");
+    await Company.insertMany(seedData.companySeedData);
+    console.log("Data entered into user");
+    await Job.insertMany(seedData.jobData);
+    console.log("Data entered into user");
   } catch (err) {
     console.log(err);
   }
