@@ -32,6 +32,10 @@ const jobSchema = mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,
     required: true,
   },
+  studentsId: {
+    // ids of student who has sent request for this job
+    type: [mongoose.SchemaTypes.ObjectId],
+  },
   createdAt: {
     type: Date,
     default: Date.now,
