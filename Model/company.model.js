@@ -24,9 +24,6 @@ const companySchema = mongoose.Schema({
   employeeId: {
     type: [mongoose.SchemaTypes.ObjectId],
   },
-  studentId: {
-    type: [mongoose.SchemaTypes.ObjectId],
-  },
   createdAt: {
     type: Date,
     default: Date.now,
