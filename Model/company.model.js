@@ -20,9 +20,11 @@ const companySchema = mongoose.Schema({
   },
   jobIds: {
     type: [mongoose.SchemaTypes.ObjectId],
+    ref :"Jobs"
   },
   employeeId: {
     type: [mongoose.SchemaTypes.ObjectId],
+    ref : "User"
   },
   createdAt: {
     type: Date,
