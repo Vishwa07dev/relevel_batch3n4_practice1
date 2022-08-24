@@ -1,38 +1,49 @@
-//Job->title,description,companybelongTo,[applicantsAppliedTojob],jobStatus,postedByHR(hrUserId)
+const mongoose = require('mongoose');
+const constants = require('../utils/constants');
 
-const mongoose = require("mongoose");
+const jobSchema = new mongoose.Schema({
 
-const { jobStatuses } = require("../utils/constants");
+    name : {
+        type: String,
+        required : true  
 
-const jobSchema = new mongoose.Schema(
-  {
-    title: {
-      type: String,
-      required: true,
     },
-    description: {
-      type: String,
-      required: true,
+    userId : {
+        type : String,
+        required : true
     },
-    status: {
-      type: String,
-      default: jobStatuses.active,
-      enum: [jobStatuses.active, jobStatuses.expired],
+    jobdescription: {
+        type : String,
+        required : true
     },
-    applicants: {
-      type: [mongoose.SchemaTypes.ObjectId],
-      ref: "User",
+   
+    createdAt : {
+        type : Date,
+        immutable : true,
+        default : () => {
+            return Date.now()
+        }
+        
     },
-    company: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: "Company",
+    updatedAt : {
+        type : Date,
+        immutable : true,
+        default :() =>{
+          return Date.now()
+        }
     },
-    postedBy: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: "User",
+    uertype : {
+        type : String,
+        required : true,
+        default : constants.userTypes.student
+        
     },
-  },
-  { timestamps: true, versionKey: false }
-);
+    userStatus : {
+        type : String,
+        required : true,
+        default : constants.userStatus.approved
 
-module.exports = mongoose.model("Job", jobSchema);
+    }
+
+});
+module.exports = mongoose.model("jobs", jobSchema);
