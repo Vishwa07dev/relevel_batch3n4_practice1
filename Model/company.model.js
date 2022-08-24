@@ -20,7 +20,7 @@ const companySchema = mongoose.Schema({
   },
   jobIds: {
     type: [mongoose.SchemaTypes.ObjectId],
-    ref :"Jobs"
+    ref :"Job"
   },
   employeeId: {
     type: [mongoose.SchemaTypes.ObjectId],
