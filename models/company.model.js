@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const compneySchema = new mongoose.Schema({
+const companySchema = new mongoose.Schema({
     name : {
         type : String,
         required : true
@@ -14,6 +14,14 @@ const compneySchema = new mongoose.Schema({
         type : Date,
         default : () => {return Date.now()}
     },
+    hr : {
+        type : [mongoose.SchemaTypes.ObjectId],
+        ref : "user"
+    },
+    jobs : {
+        type : [mongoose.SchemaTypes.ObjectId],
+        ref : "job"
+    },
 });
 
-module.exports = mongoose.model("compney",compneySchema);
+module.exports = mongoose.model("company",companySchema);

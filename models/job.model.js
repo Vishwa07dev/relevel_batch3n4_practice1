@@ -11,8 +11,13 @@ const jobSchema = new mongoose.Schema({
         required : true
     },
     poster : {
-        type : String,
+        type : mongoose.SchemaTypes.ObjectId,
+        ref : "user",
         required : true,
+    },
+    applicants: {
+        type : [mongoose.SchemaTypes.ObjectId],
+        ref : "user"
     },
     status : {
         type : String,

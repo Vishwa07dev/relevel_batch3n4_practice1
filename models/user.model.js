@@ -37,12 +37,17 @@ const userSchema = new mongoose.Schema({
         default : constants.userType.student,
         enum : [constants.userType.student, constants.userType.hr, constants.userType.admin]
     },
-    jobs : {
+    jobsPosted : {
         type : [mongoose.SchemaTypes.ObjectId],
         ref : "job"
     },
-    userCompney : {
-        type : String
+    jobsApplied : {
+        type : [mongoose.SchemaTypes.ObjectId],
+        ref : "job"
+    },
+    userCompany : {
+        type : mongoose.SchemaTypes.ObjectId,
+        ref : "company"
     }
 });
 

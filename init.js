@@ -1,5 +1,6 @@
 const User = require('./models/user.model')
-const Compney = require('./models/compney.model')
+const Company = require('./models/company.model')
+const Job = require('./models/job.model')
 const constants = require('./utils/constants')
 
 module.exports = async ()=>{
@@ -10,7 +11,7 @@ module.exports = async ()=>{
             console.log("#### ADMIN user is already present ####");
             return;
         }else{
-            await User.create({
+            const admin = await User.create({
                 name : "Dharmit Lakhani",
                 userId : "admin",
                 password : "adminPass123",
@@ -19,10 +20,11 @@ module.exports = async ()=>{
             });
             console.log("#### Admin user created ####");
 
-            await Compney.create({
+            const company = await Company.create({
                 name : "xyz",
             });
-            console.log("#### Compney created ####");
+            console.log("#### Company created ####");
+            console.log(company);
 
             const userData = [];
 
@@ -48,7 +50,7 @@ module.exports = async ()=>{
                 password : "pqrPass123",
                 email : "pqr@gmail.com",
                 userType : constants.userType.hr,
-                userCompney : "xyz"
+                userCompany : company._id
             };
 
             userData[3] = {
@@ -57,11 +59,21 @@ module.exports = async ()=>{
                 password : "mnoPass123",
                 email : "mon@gmail.com",
                 userType : constants.userType.hr,
-                userCompney : "xyz"
+                userCompany : company._id
             };
 
-            await User.insertMany(userData);
+            const demoUsers = await User.insertMany(userData);
             console.log("#### User data created ####");
+            console.log(demoUsers);
+
+            const job = await Job.create({
+                title : "Some job title",
+                description : "I am too lazy to think of a proper job posting and it's description",
+                poster : demoUsers[3]._id,
+                status : constants.jobStatus.open
+            });
+            console.log("#### Job created ####");
+            console.log(job);
         }
     }
     catch(err){
