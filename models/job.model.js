@@ -13,7 +13,7 @@ const jobSchema = new mongoose.Schema({
         type : String,
     },
     jobSeekers : {
-        type : [mongoose.SchemaTypes.String],
+        type : [mongoose.SchemaTypes.ObjectId],
         ref : "user"
     }
 })

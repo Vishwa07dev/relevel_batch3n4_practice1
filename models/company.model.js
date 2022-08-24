@@ -1,16 +1,16 @@
 const mongoose = require("mongoose");
 
 const companySchema = new mongoose.Schema({
-    companyname : {
+    companyName : {
         type : String,
         required : true,
     },
     jobsAvailabe : {
-        type : [mongoose.SchemaTypes.String],
+        type : [mongoose.SchemaTypes.ObjectId],
         ref : "job"
     },
     jobSeekers : {
-        type : [mongoose.SchemaTypes.String],
+        type : [mongoose.SchemaTypes.ObjectId],
         ref : "user"
     },
     createdAt : {

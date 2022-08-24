@@ -1,3 +1,5 @@
+const constants = require("./constants");
+
 module.exports = async (userModel, jobModel, companyModel, bcrypt) => {
     try {
         await userModel.collection.drop();
@@ -5,65 +7,63 @@ module.exports = async (userModel, jobModel, companyModel, bcrypt) => {
         await companyModel.collection.drop();
         
         const user1 = await userModel.create({
-            username : "user1",
+            userName : "user1",
             userId : "u1",
             password : bcrypt.hashSync("userpassword", 8),
             email : "user1@gmail.com",
-            jobsApplied : ['SE', 'HR', 'Manager'],
-            companiesAppliedFor : ['Relevel', 'Unacademy']
-            
+            userType : constants.userType.student,
+            jobsApplied : []
         });
         const user2 = await userModel.create({
-            username : "user2",
+            userName : "user2",
             userId : "u2",
             password : bcrypt.hashSync("userpassword", 8),
             email : "user2@gmail.com",
-            jobsApplied : ['SDE'],
-            companiesAppliedFor : ['Relevel']
+            userType : constants.userType.hr,
+            jobsPosted : []
         });
         const user3 = await userModel.create({
-            username : "user3",
+            userName : "user3",
             userId : "u3",
             password : bcrypt.hashSync("userpassword", 8),
             email : "user3@gmail.com",
-            jobsApplied : ['HR'],
-            companiesAppliedFor : ['Unacademy']
+            userType : constants.userType.admin
         });
 
         const job1 = await jobModel.create({
             jobTitle : "SDE",
             jobBelongsTo : "Relevel",
             jobDescription : "Software Development Engineering",
-            jobSeekers : ['u2']
+            jobSeekers : []
         })
         const job2 = await jobModel.create({
             jobTitle : "SE",
             jobBelongsTo : "Relevel",
             jobDescription : "Software Engineering",
-            jobSeekers : ['u1']
+            jobSeekers : []
         })        
         const job3 = await jobModel.create({
             jobTitle : "HR",
             jobBelongsTo : "Unacademy",
             jobDescription : "Human Resource",
-            jobSeekers : ['u1', 'u3']
+            jobSeekers : []
         })        
         const job4 = await jobModel.create({
             jobTitle : "Manager",
             jobBelongsTo : "Unacademy",
             jobDescription : "Desing Manager",
-            jobSeekers : ['u1']
+            jobSeekers : []
         })
 
         const company1 = await companyModel.create({
-            companyname : "Relevel",
-            jobsAvailabe : ['SDE', 'SE'],
-            jobSeekers : ['u1', 'u2']
+            companyName : "Relevel",
+            jobsAvailabe : [],
+            jobSeekers : []
         })
         const company2 = await companyModel.create({
-            companyname : "Unacademy",
-            jobsAvailabe : ['HR', 'Manager'],
-            jobSeekers : ['u1', 'u3']
+            companyName : "Unacademy",
+            jobsAvailabe : [],
+            jobSeekers : []
         })
     }
     catch(err){

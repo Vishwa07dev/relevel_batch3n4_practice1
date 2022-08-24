@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
+const constants = require("../utils/constants");
 
 const userSchema = new mongoose.Schema({
-    username : {
+    userName : {
         type : String,
         required : true
     },
@@ -21,13 +22,18 @@ const userSchema = new mongoose.Schema({
         minLength : 10,
         unique : true
     },
+    userType : {
+        type : String,
+        required : true,
+        enum : [constants.userType.admin, constants.userType.hr, constants.userType.student]
+    },
     jobsApplied : {
-        type : [mongoose.SchemaTypes.String],
+        type : [mongoose.SchemaTypes.ObjectId],
         ref : "job"
     },
-    companiesAppliedFor : {
-        type : [mongoose.SchemaTypes.String],
-        ref : "company",
+    jobsPosted : {
+        type : [mongoose.SchemaTypes.ObjectId],
+        ref : "job"
     },
     createdAt : {
         type : Date,
@@ -37,7 +43,7 @@ const userSchema = new mongoose.Schema({
     updatedAt : {
         type : Date,
         default : () => Date.now()
-    },
+    }
 })
 
 module.exports = mongoose.model("user",userSchema);
