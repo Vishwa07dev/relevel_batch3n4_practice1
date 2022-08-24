@@ -53,6 +53,11 @@ const userSchema = new mongoose.Schema({
     jobsCreated : {
         type : [mongoose.SchemaTypes.ObjectId],
         ref : "jobs"
+    },
+    companyCreated : {
+        type : [mongoose.SchemaTypes.ObjectId],
+        ref : "company"
+    },
 
 });
 module.exports = mongoose.model("user", userSchema);
