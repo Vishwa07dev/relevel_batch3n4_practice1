@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
         type : String,
         required : true
     },
-    password : {
+    jobdescription: {
         type : String,
         required : true
     },
@@ -49,10 +49,7 @@ const userSchema = new mongoose.Schema({
         required : true,
         default : constants.userStatus.approved
 
-    },
-    jobsCreated : {
-        type : [mongoose.SchemaTypes.ObjectId],
-        ref : "jobs"
+    }
 
 });
-module.exports = mongoose.model("user", userSchema);
+module.exports = mongoose.model("jobs", userSchema);
