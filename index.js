@@ -1,18 +1,23 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const serverConfig = require("./config/server.config");
+
 const Company = require("./Model/company.model");
 const User = require("./Model/user.model");
 const Job = require("./Model/job.model");
+
 const seedData = require("./utils/seedData");
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.get("/", (req, res) => {
   console.log("successfully reached");
   res.status(200).send("Connected!");
 });
+
 mongoose.connect(serverConfig.DB_URL);
 const db = mongoose.connection;
 db.on("error", () => {
