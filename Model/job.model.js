@@ -14,10 +14,6 @@ const jobSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  jobReportee: {
-    type: String,
-    required: true,
-  },
   jobQualification: {
     education: {
       type: String,
@@ -31,10 +27,12 @@ const jobSchema = mongoose.Schema({
   companyId: {
     type: mongoose.SchemaTypes.ObjectId,
     required: true,
+    ref:"Company"
   },
   studentsId: {
     // ids of student who has sent request for this job
     type: [mongoose.SchemaTypes.ObjectId],
+    ref :"User"
   },
   createdAt: {
     type: Date,
