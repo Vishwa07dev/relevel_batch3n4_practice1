@@ -33,6 +33,10 @@ const jobSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,
     ref: "company",
   },
+  students: {
+    type: [mongoose.SchemaTypes.ObjectId],
+    ref: "user",
+  },
 });
 
 module.exports = mongoose.model("job", jobSchema);

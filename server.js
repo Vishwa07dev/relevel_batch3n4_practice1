@@ -38,11 +38,11 @@ async function init() {
    * Check if the admin user is already present
    */
   try {
-    //     await User.collection.drop();
+    await User.collection.drop();
 
-    //     await Company.collection.drop();
+    await Company.collection.drop();
 
-    //     await Job.collection.drop();
+    await Job.collection.drop();
 
     const user = await User.create({
       name: "lakshya",
@@ -56,7 +56,6 @@ async function init() {
       name: "AMAZON",
       companyId: "111",
       details: "AWS Amazon WEB services",
-      companyJObIDs: [101],
     });
 
     const job = await Job.create({
@@ -64,10 +63,12 @@ async function init() {
       JobId: "103",
       details: "Javabackend engineer",
       email: "lakshya@gmail.com",
-      companyAffliatedTO: "111",
+      companyAffliatedTO: company._id,
     });
 
     console.log(user);
+    console.log(job);
+    console.log(company);
   } catch (err) {
     console.log("err in db initialization , " + err.message);
     console.log(err);

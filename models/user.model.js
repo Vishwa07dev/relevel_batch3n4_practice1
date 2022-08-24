@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema({
     default: "STUDENT",
     enum: ["STUDENT", "HR", "ADMIN"],
   },
+  jobs: { type: [mongoose.SchemaTypes.ObjectId], ref: "company" },
 });
 
 module.exports = mongoose.model("user", userSchema);

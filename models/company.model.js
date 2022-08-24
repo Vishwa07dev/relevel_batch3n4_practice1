@@ -29,7 +29,7 @@ const companySchema = new mongoose.Schema({
       return Date.now();
     },
   },
-  ompanyJObIDs: {
+  companyJObIDs: {
     type: [mongoose.SchemaTypes.ObjectId],
     ref: "job",
   },
