@@ -4,7 +4,7 @@
   "description": "Creating an application like Naukari.com",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -17,11 +17,16 @@
   },
   "homepage": "https://github.com/Vishwa07dev/relevel_batch3n4_practice1#readme",
   "dependencies": {
+<<<<<<< HEAD
     "body-parser": "^1.20.0",
     "dot": "^1.1.3",
     "env": "^0.0.2",
     "express": "^4.18.1",
     "init": "^0.1.2",
+=======
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.1",
+>>>>>>> 025ca315d4530f5c7d428b5afe9f357246ca161e
     "mongoose": "^6.5.2"
   }
 }
