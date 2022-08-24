@@ -1,25 +1,28 @@
 const mongoose = require("mongoose");
 const constant = require("../Utils/constant");
-const UserSchema = new mongoose.Schema({
-    fname: {
-        type: String,
-        required: true
-    },
-    lname: {
-        type: String,
-        required: true
-    },
+const CompanySchema = new mongoose.Schema({
+
     email: {
         type: String,
         required: true,
         unique: true
     },
-    userId: {
+    descript: {
+        type: String,
+        required: true
+    },
+    companyEmail: {
         type: String,
         required: true,
-        unique: true
+        default: ''
     },
-    phone: {
+    companyName: {
+        type: String,
+        required: true,
+        default: ''
+
+    },
+    companyPhone: {
         type: String,
         default: ''
 
@@ -29,22 +32,7 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    userType: {
-        type: String,
-        required: true,
-        default: constant.userTypes.user,
-        enum: [
-            constant.userTypes.user,
-            constant.userTypes.hr,
-            constant.userTypes.admin
-        ]
-
-    },
-    jobsApplied: {
-        type: [mongoose.SchemaTypes.ObjectId],
-        ref: "jobs"
-    },
-    jobsPosted: {
+    jobs: {
         type: [mongoose.SchemaTypes.ObjectId],
         ref: "jobs"
     },
@@ -62,6 +50,5 @@ const UserSchema = new mongoose.Schema({
             return Date.now()
         }
     }
-
 });
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Companies', CompanySchema);
