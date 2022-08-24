@@ -16,6 +16,14 @@ const UserSchema=new mongoose.Schema({
         type:String,
         required:true,
     },
+    company:{
+        type:[mongoose.SchemaType.ObjectId],
+        ref:"company"
+    },
+    job:{
+        type:[mongoose.SchemaType.ObjectId],
+        ref:"job"
+    },
     userType:{
         type:String,
         required:true,
@@ -34,7 +42,7 @@ const UserSchema=new mongoose.Schema({
             return Date.now();
         }
     }
-})
+},{versionKey:false})
 
 
 module.exports=mongoose.model("user",UserSchema)

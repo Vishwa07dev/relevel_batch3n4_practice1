@@ -1,7 +1,7 @@
 const mongoose=require("mongoose");
 
 const CompanySchema=new mongoose.Schema({
-    name:{
+    companyname:{
         type:String,
         required:true
     },
@@ -9,7 +9,7 @@ const CompanySchema=new mongoose.Schema({
         type:String,
         required:true
     },
-    Jobs:{
+    jobs:{
         type:[mongoose.SchemaType.ObjectId],
         ref:"Job"
     },
@@ -38,7 +38,7 @@ const CompanySchema=new mongoose.Schema({
         }
     },
   
-})
+},{versionKey:false})
 
 
 module.exports=mongoose.model("company",CompanySchema)

@@ -1,7 +1,7 @@
 const mongoose=require("mongoose");
 
 const JobSchema=new mongoose.Schema({
-    name:{
+    jobname:{
         type:String,
         required:true
     },
@@ -26,7 +26,7 @@ const JobSchema=new mongoose.Schema({
             return Date.now();
         }
     }
-})
+},{versionKey:false})
 
 
 module.exports=mongoose.model("Job",JobSchema)
