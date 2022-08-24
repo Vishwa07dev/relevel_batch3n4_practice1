@@ -1,14 +1,11 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+
 const dbConfig = require("./configs/db.config");
-const serverConfig = require("./configs/server.config");
 const User = require("./models/user.model");
 const Company = require("./models/company.model");
 const Job = require("./models/job.model");
 
-/**
- * Initialize the connection to the mongoDB
- */
 mongoose.connect(dbConfig.DB_URI);
 const db = mongoose.connection;
 db.on("error", () => {
@@ -19,9 +16,6 @@ db.once("open", () => {
   init();
 });
 
-/**
- * Create the ADMIN user at the boot time
- */
 async function init() {
   try {
     await User.collection.drop();

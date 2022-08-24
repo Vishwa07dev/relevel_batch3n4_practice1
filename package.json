@@ -4,7 +4,7 @@
   "description": "Creating an application like Naukari.com",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
