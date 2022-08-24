@@ -1,36 +1,55 @@
-//Company->name, address, verified,[jobPostedIds],[hruserids](initiallyEmpty)
-const mongoose = require("mongoose");
-const { companyVerificationStatuses } = require("../utils/constants");
+const mongoose = require('mongoose');
+const constants = require('../utils/constants');
 
-const companySchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    address: {
-      type: String,
-      required: true,
-    },
-    verified: {
-      type: String,
-      default: companyVerificationStatuses.pending,
-      enum: [
-        companyVerificationStatuses.approved,
-        companyVerificationStatuses.pending,
-        companyVerificationStatuses.rejected,
-      ],
-    },
-    jobsPosted: {
-      type: [mongoose.SchemaTypes.ObjectId],
-      ref: "Job",
-    },
-    hrs: {
-      type: [mongoose.SchemaTypes.ObjectId],
-      ref: "User",
-    },
-  },
-  { timestamps: true, versionKey: false }
-);
+const userSchema = new mongoose.Schema({
 
-module.exports = mongoose.model("Company", companySchema);
+    company : {
+        type: String,
+        required : true  
+
+    },
+    userId : {
+        type : String,
+        required : true
+    },
+    tittle: {
+        type : String,
+        required : true
+    },
+    email : {
+        type : String ,
+        required : true,
+        lowercase : true,
+        minLength : 10,
+        unique : true
+    },
+    createdAt : {
+        type : Date,
+        immutable : true,
+        default : () => {
+            return Date.now()
+        }
+        
+    },
+    updatedAt : {
+        type : Date,
+        immutable : true,
+        default :() =>{
+          return Date.now()
+        }
+    },
+    uertype : {
+        type : String,
+        required : true,
+        default : constants.userTypes.student
+        
+    },
+    userStatus : {
+        type : String,
+        required : true,
+        default : constants.userStatus.approved
+
+    }
+
+});
+module.exports = mongoose.model("company", userSchema);
