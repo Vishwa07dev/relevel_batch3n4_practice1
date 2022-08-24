@@ -2,16 +2,39 @@ const mongoose=require("mongoose")
 const constant=require("../Utils/jobs")
 
 const jobobj=new mongoose.Schema({
-    jobId:{
+    title:{
         type:String,
         required:true
     },
-    jobType:{
+    Description:{
         type:String,
-        required:true,
-        default:constant.jobtype.se1,
-        enum:[constant.jobtype.se1,constant.jobtype.se2,constant.jobtype.se3]
+        required:true
+    },
+    jobPosted:{
+        type:[mongoose.SchemaType.ObjectId],
+        ref:"Job"
+    },
+    companyPosted:{
+        type:[mongoose.SchemaType.ObjectId],
+        ref:"Company"
+    },
+    appliedUserId:{
+        type:[mongoose.SchemaType.ObjectId],
+        ref:"User"
+    },
+    createdAt:{
+        type:Date,
+        immutable:true,
+        default:()=>{
+            return Date.now()
+        }
+    },
+    updatedAt:{
+        type:Date,
+        default:()=>{
+            return Date.now()
+        }
     }
-    
+
 })
 module.exports=mongoose.model("Job",jobobj)

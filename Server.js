@@ -20,49 +20,46 @@ db.once("open", () => {
 });
 async function initial(){
     try{
-        //await user.collection.drop();
+        await db.db.dropCollection("users");
 
         const user1=await User.create({
             name:"Mand3",
             email:"mandeep.com",
             userid:"3",
             password:"Hie",
-            usertype:"HR",
-            userstatus:"Pending"
+            usertype:"HR"
         });
         const user2=await User.create({
             name:"Mand4",
             email:"mandeep1.com",
             userid:"4",
             password:"Hie",
-            usertype:"HR",
-            userstatus:"Pending"
+            usertype:"HR"
         });
         const user3=await User.create({
             name:"Mand5",
             email:"Mandee2.com",
             userid:"5",
             password:"Hie",
-            usertype:"HR",
-            userstatus:"Pending"
+            usertype:"HR"
         });
         const job1= await jobs.create({
-            jobId:1,
-            jobType:"Softwareengineer1"
+            title:"Se1",
+            Description:"This is for Se1"
         })
         const job2= await jobs.create({
-            jobId:2,
-            jobType:"Softwareengineer2"
+            title:"Se1",
+            Description:"This is for Se1"
         })
         const comapny1=await company.create({
-            companyId:"1",
-            hiringfor:"Softwareengineer1",
-            jobdescription:"This is hiring for se1"
+            CompanyName:"Your Fav Company",
+            Description:"Opening for SE1 ",
+            email:"Yourfavcomany@gmail.com"
         })
         const comapny2=await company.create({
-            companyId:"2",
-            hiringfor:"Softwareengineer2",
-            jobdescription:"This is hiring for se1"
+            CompanyName:"Your Fav Company 2",
+            Description:"Opening for SE2 ",
+            email:"Yourfavcomany2@gmail.com"
         })
 
         console.log(user1)

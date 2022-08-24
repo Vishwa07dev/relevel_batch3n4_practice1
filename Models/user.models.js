@@ -33,6 +33,29 @@ const userobj=new mongoose.Schema({
         default:constant.userstatus.approved,
         enum:[constant.userstatus.approved,constant.userstatus.pending,constant.userstatus.rejeceted]
     }
+    ,
+    createdAt:{
+        type:Date,
+        immutable:true,
+        default:()=>{
+            return Date.now()
+        }
+    },
+    updatedAt:{
+        type:Date,
+        default:()=>{
+            return Date.now()
+        }
+    },
+    jobsApplied:{
+        type:[mongoose.SchemaType.ObjectId],
+        ref:"Job"
+    },
+    jobPosted:{
+        type:[mongoose.SchemaType.ObjectId],
+        ref:"Job"
+    },
+
 })
 
 module.exports=mongoose.model("User",userobj)

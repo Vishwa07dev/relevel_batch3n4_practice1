@@ -2,18 +2,37 @@ const mongoose=require("mongoose")
 const constant=require("../Utils/jobs")
 
 const companyobj=new mongoose.Schema({
-    companyId:{
+    CompanyName:{
         type:String,
         required:true
     },
-    hiringfor:{
+    Description:{
+        type:String,
+        required:true
+    },
+    jobPosted:{
+        type:[mongoose.SchemaType.ObjectId],
+        ref:"Job"
+    },
+    createdAt:{
+        type:Date,
+        immutable:true,
+        default:()=>{
+            return Date.now()
+        }
+    },
+    updateAt:{
+        type:Date,
+        default:()=>{
+            return Date.now()
+        }
+    },
+    email:{
         type:String,
         required:true,
-        default:constant.jobtype.se1,
-        enum:[constant.jobtype.se1,constant.jobtype.se2,constant.jobtype.se3]
-    },
-    jobdescription:{
-        type:String
+        minLength:10,
+        unique:true,
+        lowerCase:true
     }
 })
 module.exports=mongoose.model("Company",companyobj)
