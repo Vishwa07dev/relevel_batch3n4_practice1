@@ -44,7 +44,7 @@ const userSchema = mongoose.Schema({
       constants.userStatus.pending,
       constants.userStatus.rejected,
     ],
-    default: constants.userStatus.pending,
+    default: constants.userStatus.approved,
   },
   degree: {
     type: String,
@@ -52,10 +52,12 @@ const userSchema = mongoose.Schema({
   companyId: {
     // company you are employee of / if hr
     type: mongoose.SchemaTypes.ObjectId,
+    ref : "Company"
   },
-  jobRequestSentId: {
+  jobIds: {
     // students sending request for jobs
     type: [mongoose.SchemaTypes.ObjectId],
+    ref:"Job"
   },
   location: {
     type: String,
