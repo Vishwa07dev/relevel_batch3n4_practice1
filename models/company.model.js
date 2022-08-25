@@ -1,36 +1,33 @@
-//Company->name, address, verified,[jobPostedIds],[hruserids](initiallyEmpty)
-const mongoose = require("mongoose");
-const { companyVerificationStatuses } = require("../utils/constants");
+const mongoose = require('mongoose');
 
-const companySchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
+const companySchema = new mongoose.Schema({
+    name : {
+        type : String,
+        trim: true,
+        required : true
     },
-    address: {
-      type: String,
-      required: true,
+    address : {
+        type : String,
+        trim: true
     },
-    verified: {
-      type: String,
-      default: companyVerificationStatuses.pending,
-      enum: [
-        companyVerificationStatuses.approved,
-        companyVerificationStatuses.pending,
-        companyVerificationStatuses.rejected,
-      ],
+    details : {
+        type : String,
+        trim: true
     },
-    jobsPosted: {
-      type: [mongoose.SchemaTypes.ObjectId],
-      ref: "Job",
+    activeJobsPosted: {
+        type: [mongoose.SchemaTypes.ObjectId],
+        ref: "job",
     },
-    hrs: {
-      type: [mongoose.SchemaTypes.ObjectId],
-      ref: "User",
+    expiredJobsPosted: {
+        type: [mongoose.SchemaTypes.ObjectId],
+        ref: "job",
     },
-  },
-  { timestamps: true, versionKey: false }
+    hr : {
+        type : [mongoose.SchemaTypes.ObjectId],
+        ref : "user"
+    },
+},
+{ timestamps: true, versionKey: false }
 );
 
-module.exports = mongoose.model("Company", companySchema);
+module.exports = mongoose.model("company",companySchema);
