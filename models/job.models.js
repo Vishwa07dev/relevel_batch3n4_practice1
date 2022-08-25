@@ -5,10 +5,9 @@ const JobSchema=new mongoose.Schema({
         type:String,
         required:true
     },
-    catageory:{
+    category:{
         type:String,
         required:true,
-       enum:[] 
     },
     description:{
         type:String,
@@ -17,11 +16,21 @@ const JobSchema=new mongoose.Schema({
     vacancies:{
         type:Number,
         required:true,
-        default:0
+        default:1
+    },
+    company:{
+        type:mongoose.SchemaType.ObjectId,
+        ref:"company"
     },
     datePublished:{
         type:Date,
         immutable:true,
+        default:()=>{
+            return Date.now();
+        }
+    },
+    dateUpdated:{
+        type:Date,
         default:()=>{
             return Date.now();
         }

@@ -37,7 +37,12 @@ const CompanySchema=new mongoose.Schema({
             return Date.now();
         }
     },
-  
+    updatedAt:{
+        type:Date,
+        default:()=>{
+            return Date.now();
+        }
+    }
 },{versionKey:false})
 
 

@@ -16,11 +16,7 @@ const UserSchema=new mongoose.Schema({
         type:String,
         required:true,
     },
-    company:{
-        type:[mongoose.SchemaType.ObjectId],
-        ref:"company"
-    },
-    job:{
+    jobs:{
         type:[mongoose.SchemaType.ObjectId],
         ref:"job"
     },
