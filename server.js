@@ -1,14 +1,20 @@
+
+const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+
 const dbConfig = require("./configs/db.config");
 const serverConfig = require("./configs/server.config");
 const User = require("./models/user.model");
 const Company = require("./models/company.model");
 const Job = require("./models/job.model");
 
-/**
- * Initialize the connection to the mongoDB
- */
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended : true}));
+
 mongoose.connect(dbConfig.DB_URI);
 const db = mongoose.connection;
 db.on("error", () => {
@@ -19,9 +25,7 @@ db.once("open", () => {
   init();
 });
 
-/**
- * Create the ADMIN user at the boot time
- */
+
 async function init() {
   try {
     await User.collection.drop();
@@ -42,8 +46,8 @@ async function init() {
       verified: "APPROVED",
     });
 
-    console.log(adminUser);
-    console.log(company);
+    // console.log(adminUser);
+    // console.log(company);
 
     const applicantUser = await User.create({
       name: "applicant",
@@ -52,7 +56,7 @@ async function init() {
       email: "applicant@email.com",
       userType: "APPLICANT",
     });
-    console.log(applicantUser);
+    // console.log(applicantUser);
 
     //find the company id and and then create a hr of that company
     const hrUser = await User.create({
@@ -64,13 +68,13 @@ async function init() {
       userType: "HR",
       userStatus: "APPROVED", //approved for testing
     });
-    console.log(hrUser);
+    // console.log(hrUser);
 
     //now place the hr in the company too
     company.hrs.push(hrUser._id);
     await company.save(); //save it in db
 
-    console.log("after saving company", company);
+    // console.log("after saving company", company);
     //now the hrUser can post a job
     const job = await Job.create({
       title: "Job",
@@ -78,11 +82,11 @@ async function init() {
       company: company._id, //usually it will be picked by login user company
       postedBy: hrUser._id,
     });
-    console.log(job);
+    // console.log(job);
     //now update the company jobposted
     company.jobsPosted.push(job._id);
     await company.save(); //save it in db
-    console.log("Company After", company);
+    // console.log("Company After", company);
 
     //applicant applying a job
     job.applicants.push(applicantUser._id);
@@ -90,9 +94,19 @@ async function init() {
     //also update the applicantUser
     applicantUser.jobsApplied.push(job._id);
     await applicantUser.save();
-    console.log("After", job);
-    console.log("After", applicantUser);
+    // console.log("After", job);
+    // console.log("After", applicantUser);
   } catch (err) {
     console.log("err in db initialization , " + err);
   }
 }
+
+
+
+require("./routes/auth.route")(app);
+require("./routes/user.route")(app);
+
+// exporting for integration testing purpose
+module.exports = app.listen(serverConfig.PORT, () => {
+    console.log(`Server is up on the port ${serverConfig.PORT}`);
+})
