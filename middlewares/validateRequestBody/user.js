@@ -9,7 +9,6 @@ exports.validateUserUpdateRequestBody = async (req, res, next) => {
     const company = await Company.findOne({ _id: req.body.company });
     if (!company) {
       return res.status(400).json({
-        success: false,
         message: "Company ID NOT VALID",
       });
     }

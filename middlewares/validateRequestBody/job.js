@@ -12,13 +12,11 @@ exports.validateJobRequestBody = async (req, res, next) => {
 
   if (!title) {
     return res.status(400).json({
-      success: false,
       message: "Title is required field and is not provided.",
     });
   }
   if (!description) {
     return res.status(400).json({
-      success: false,
       message: "Description is required field and is not provided.",
     });
   }
@@ -29,13 +27,11 @@ exports.validateJobRequestBody = async (req, res, next) => {
     const companyId = req.body.companyId;
     if (!companyId) {
       return res.status(400).json({
-        success: false,
         message: "CompanyId need to be passed if admin is creating the job.",
       });
     }
     if (!isValidObjectId(companyId)) {
       return res.status(400).json({
-        success: false,
         message: "Not valid CompanyId.",
       });
     }
@@ -43,7 +39,6 @@ exports.validateJobRequestBody = async (req, res, next) => {
     const company = await Company.findOne({ _id: companyId });
     if (company == null) {
       return res.status(400).json({
-        success: false,
         message: "Not valid CompanyId.",
       });
     }

@@ -40,7 +40,6 @@ exports.create = async (req, res) => {
   } catch (error) {
     console.error("Error while creating job ", error.message);
     return res.status(500).json({
-      success: false,
       message: "Internal Server Error",
     });
   }
@@ -64,14 +63,12 @@ exports.findAll = async (req, res) => {
       //so applicant user cant know the ids of the other user
     }
     return res.status(200).json({
-      success: true,
       documentResultsCount: jobs.length,
       data: jobs,
     });
   } catch (error) {
     console.log("Error while fetching job details.", error.message);
     return res.status(500).json({
-      success: false,
       message: "Internal server error while fetching the data.",
     });
   }
@@ -87,13 +84,11 @@ exports.findOne = async (req, res) => {
       job.applicants = undefined; //so applicant user cant know the ids of the other user
     }
     return res.status(200).json({
-      success: true,
       data: job,
     });
   } catch (error) {
     console.log("Error while fetching job details.", error.message);
     return res.status(500).json({
-      success: false,
       message: "Internal server error while fetching the data.",
     });
   }
@@ -107,9 +102,7 @@ exports.update = async (req, res) => {
     });
 
     const job = await Job.findOne({ _id: req.params.id });
-    console.log("******************");
-    console.log(job);
-    console.log("******************");
+
     //check if job status is active then only applicant(with approved status) will be able to apply for job
     if (
       signedInUser.userType === userTypes.applicant &&
@@ -117,7 +110,6 @@ exports.update = async (req, res) => {
     ) {
       if (job.status === jobStatuses.expired) {
         return res.status(400).json({
-          success: false,
           message: "Job is not active, its already expired.",
         });
       } else {
@@ -128,7 +120,6 @@ exports.update = async (req, res) => {
         await signedInUser.save();
 
         return res.status(200).json({
-          success: true,
           message: "Job application is successfull.",
         });
       }
@@ -139,7 +130,6 @@ exports.update = async (req, res) => {
         ![jobStatuses.active, jobStatuses.expired].includes(req.body.status)
       ) {
         return res.status(400).json({
-          success: false,
           message:
             "Job status is not valid value.Allowed values are- ACTIVE AND EXPIRED.",
         });
@@ -154,7 +144,6 @@ exports.update = async (req, res) => {
 
         const updatedJob = await job.save();
         return res.status(200).json({
-          success: true,
           message: "Job updated is successfully done.",
           data: updatedJob,
         });
@@ -162,7 +151,6 @@ exports.update = async (req, res) => {
     }
   } catch (error) {
     return res.status(500).json({
-      success: false,
       message: "Some internal error occured.",
     });
   }

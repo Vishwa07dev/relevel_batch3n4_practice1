@@ -15,32 +15,27 @@ exports.validateSignUpRequestBody = async (req, res, next) => {
 
   if (!name) {
     return res.status(400).json({
-      success: false,
       message: "Name is required field and is not provided.",
     });
   }
   if (!email) {
     return res.status(400).json({
-      success: false,
       message: "Email is required field and is not provided.",
     });
   }
   if (!password) {
     return res.status(400).json({
-      success: false,
       message: "Password is required field and is not provided.",
     });
   }
   if (!userId) {
     return res.status(400).json({
-      success: false,
       message: "UserId is required field and is not provided.",
     });
   }
 
   if (!isValidEmail(email)) {
     return res.status(400).json({
-      success: false,
       message: "Email provided is invalid.",
     });
   }
@@ -50,12 +45,10 @@ exports.validateSignUpRequestBody = async (req, res, next) => {
 
   if (isAvailableToTake instanceof Error) {
     return res.status(500).json({
-      success: false,
       message: "Internal server error while validating the request",
     });
   } else if (isAvailableToTake == false) {
     return res.status(400).json({
-      success: false,
       message: "Email is already taken.Not available.",
     });
   }
@@ -64,12 +57,10 @@ exports.validateSignUpRequestBody = async (req, res, next) => {
   isAvailableToTake = await isValueUnique(User, { userId: userId });
   if (isAvailableToTake instanceof Error) {
     return res.status(500).json({
-      success: false,
       message: "Internal server error while validating the request",
     });
   } else if (isAvailableToTake == false) {
     return res.status(400).json({
-      success: false,
       message: "User Id is already taken.Not available.",
     });
   }
@@ -78,7 +69,6 @@ exports.validateSignUpRequestBody = async (req, res, next) => {
     //if userType is provided in request body , then ensure userType provided value is one of those values [ADMIN,APPLICANT,HR]
     if (!isUserTypeValid(req.body.userType)) {
       return res.status(400).json({
-        success: false,
         message:
           "UserType provided is not correct value. Allowed values for userType: ADMIN, APPLICANT AND HR.",
       });
@@ -90,7 +80,6 @@ exports.validateSignUpRequestBody = async (req, res, next) => {
       //validate companyId is valid ObjectId or not
       if (!isValidObjectId(req.body.companyId)) {
         return res.status(400).json({
-          success: false,
           message: "Not a valid companyId.",
         });
       }
@@ -100,12 +89,10 @@ exports.validateSignUpRequestBody = async (req, res, next) => {
       });
       if (isCompanyNotExists instanceof Error) {
         return res.status(500).json({
-          success: false,
           message: "Internal server error while validating the request",
         });
       } else if (isCompanyNotExists == true) {
         return res.status(400).json({
-          success: false,
           message: "Not a valid companyId.",
         });
       }

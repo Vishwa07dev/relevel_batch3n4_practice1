@@ -10,13 +10,11 @@ exports.validateCompanyRequestBody = async (req, res, next) => {
 
   if (!name) {
     return res.status(400).json({
-      success: false,
       message: "Name is required field and is not provided.",
     });
   }
   if (!address) {
     return res.status(400).json({
-      success: false,
       message: "Address is required field and is not provided.",
     });
   }
@@ -24,7 +22,6 @@ exports.validateCompanyRequestBody = async (req, res, next) => {
     //if verified is provided in request body, then check whether a valid type is provided or not
     if (!isCompanyVerificationStatusValid(req.body.verified)) {
       return res.status(400).json({
-        success: false,
         message:
           "Verified provided is not correct value. Allowed values for verified: APPROVED, PENDING AND REJECTED.",
       });
@@ -38,13 +35,11 @@ exports.validateCompanyUpdateRequestBody = async (req, res, next) => {
   trimValuesInRequestBody(req);
   if (req.body.name == "") {
     return res.status(400).json({
-      success: false,
       message: "Name can't be empty string.",
     });
   }
   if (req.body.address == "") {
     return res.status(400).json({
-      success: false,
       message: "Address can't be empty string.",
     });
   }
@@ -52,7 +47,6 @@ exports.validateCompanyUpdateRequestBody = async (req, res, next) => {
     //if verified is provided in request body, then check whether a valid type is provided or not
     if (!isCompanyVerificationStatusValid(req.body.verified)) {
       return res.status(400).json({
-        success: false,
         message:
           "Verified provided is not correct value. Allowed values for verified: APPROVED, PENDING AND REJECTED.",
       });
@@ -61,10 +55,6 @@ exports.validateCompanyUpdateRequestBody = async (req, res, next) => {
   //all validation passed
   next();
 };
-
-
-
-
 
 /**
  *

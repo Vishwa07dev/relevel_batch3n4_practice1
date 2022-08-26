@@ -24,14 +24,12 @@ exports.findAllUsers = async (req, res) => {
   try {
     const users = await User.find(queryObj);
     return res.status(200).json({
-      success: true,
       documentResultsCount: users.length,
       data: filterUserSetResponse(users),
     });
   } catch (error) {
     console.error("Error while fetching all the users", error.message);
     res.status(500).json({
-      success: false,
       message: "Internal server error",
     });
   }
@@ -44,13 +42,11 @@ exports.findByUserId = async (req, res) => {
 
     // user validation would have happened in the middleware itself
     return res.status(200).json({
-      success: true,
       data: filterUserResponse(user),
     });
   } catch (error) {
     console.error("Error while searching the user ", error.message);
     return res.status(500).json({
-      success: false,
       message: "Internal Server Error",
     });
   }
@@ -92,14 +88,12 @@ exports.update = async (req, res) => {
     const updatedUser = await user.save();
 
     return res.status(200).json({
-      success: true,
       message: "User updated successfully",
       data: updatedUser,
     });
   } catch (error) {
     console.log("Error while updating user", error.message);
     res.status(500).json({
-      success: false,
       message: "Internal server error",
     });
   }

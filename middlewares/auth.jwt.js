@@ -19,7 +19,6 @@ const verifyToken = (req, res, next) => {
   if (!token) {
     //forbidden-403 http status
     return res.status(403).json({
-      success: false,
       message: "No Token provided. Access Prohibited.",
     });
   }
@@ -28,7 +27,6 @@ const verifyToken = (req, res, next) => {
     if (error) {
       console.log(error);
       return res.status(401).json({
-        success: false,
         message: "Unauthorized.",
       });
     }
@@ -54,7 +52,6 @@ const isAdmin = async (req, res, next) => {
     } else {
       //access not allowed
       return res.status(403).json({
-        success: false,
         message:
           "No access allowed to the user for this requested endpoint. ADMIN WITH APPROVED STATUS only allowed",
       });
@@ -62,7 +59,6 @@ const isAdmin = async (req, res, next) => {
   } catch (error) {
     console.error("Internal server error", error.message);
     return res.status(500).json({
-      success: false,
       message: "Internal server error while fetching the data. ",
     });
   }
@@ -86,7 +82,6 @@ const isAdminOrHr = async (req, res, next) => {
       const companyId = user.companyId;
       if (!companyId) {
         return res.status(403).json({
-          success: false,
           message:
             "No access allowed to the user for this requested endpoint. No Company is listed in your record.",
         });
@@ -98,7 +93,6 @@ const isAdminOrHr = async (req, res, next) => {
         });
         if (!company) {
           return res.status(403).json({
-            success: false,
             message:
               "No access allowed to the user for this requested endpoint. The Company is not having approved status.Contact admin for more details.",
           });
@@ -110,7 +104,6 @@ const isAdminOrHr = async (req, res, next) => {
     } else {
       //access not allowed,user is other than admin or hr
       return res.status(403).json({
-        success: false,
         message:
           "No access allowed to the user for this requested endpoint. ADMIN WITH APPROVED STATUS only allowed or HR  WITH APPROVED STATUS along with Company VerifiedStatus as Approved.",
       });
@@ -118,7 +111,6 @@ const isAdminOrHr = async (req, res, next) => {
   } catch (error) {
     console.error("Internal server error", error.message);
     return res.status(500).json({
-      success: false,
       message: "Internal server error while fetching the data. ",
     });
   }
@@ -144,7 +136,6 @@ const isAdminOrOwner = async (req, res, next) => {
     } else {
       //not a valid user to access this endpoint
       return res.status(403).json({
-        success: false,
         message:
           "No access allowed to the user for this requested endpoint.ADMIN (with approved Status) or Owner only allowed.",
       });
@@ -152,7 +143,6 @@ const isAdminOrOwner = async (req, res, next) => {
   } catch (error) {
     console.error("Internal server error", error.message);
     return res.status(500).json({
-      success: false,
       message: "Internal server error while fetching the data. ",
     });
   }
@@ -169,7 +159,6 @@ const isOwnerOrApplicantOrAdmin = async (req, res, next) => {
     //check whether the signedInUser is the hr and is the owner of the current job
     if (job.postedBy !== signedInUser._id) {
       return res.status(403).json({
-        success: false,
         message:
           "Only the owner of this Job or Admin or Applicant with approved status is allowed to update the job.",
       });
@@ -181,7 +170,6 @@ const isOwnerOrApplicantOrAdmin = async (req, res, next) => {
     //applicant the user must be approved status
     if (signedInUser.userStatus !== userStatuses.approved) {
       return res.status(403).json({
-        success: false,
         message:
           "Only the owner of this Job or Admin or Applicant with approved status is allowed to update the job.",
       });
@@ -194,7 +182,6 @@ const isOwnerOrApplicantOrAdmin = async (req, res, next) => {
     const user = await User.findOne({ userId: req.userId });
     if (job.applicants.includes(user._id)) {
       return res.status(400).json({
-        success: false,
         message:
           "Applicant user already has been applied for the job.You can't apply a single job again.",
       });

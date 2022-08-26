@@ -8,14 +8,12 @@ const User = require("../models/user.model");
 const isValidCompanyIdInReqParam = async (req, res, next) => {
   if (!req.params.id) {
     return res.status(400).json({
-      success: false,
       message: "No CompanyId passed as parameter.",
     });
   }
   //check whether companyId is of valid ObjectId type or not
   if (!isValidObjectId(req.params.id)) {
     return res.status(400).json({
-      success: false,
       message: "Not a valid companyId.",
     });
   }
@@ -23,7 +21,6 @@ const isValidCompanyIdInReqParam = async (req, res, next) => {
     const company = await Company.findById(req.params.id);
     if (company == null) {
       return res.status(400).json({
-        success: false,
         message: "Not a valid companyId.",
       });
     }
@@ -31,7 +28,7 @@ const isValidCompanyIdInReqParam = async (req, res, next) => {
     next();
   } catch (error) {
     console.log("Error while accessing the  info", error.message);
-    return res.status(500).send({
+    return res.status(500).json({
       message: "Internal server error while accessing the  data.",
     });
   }
@@ -41,7 +38,6 @@ const isValidCompanyIdInReqParam = async (req, res, next) => {
 const isValidUserIdInReqParam = async (req, res, next) => {
   if (!req.params.id) {
     return res.status(400).json({
-      success: false,
       message: "No UserId passed as parameter.",
     });
   }
@@ -50,7 +46,6 @@ const isValidUserIdInReqParam = async (req, res, next) => {
     const user = await User.findOne({ userId: req.params.id });
     if (!user) {
       return res.status(400).json({
-        success: false,
         message: "UserId passed,doesn't exist.",
       });
     }
@@ -58,7 +53,7 @@ const isValidUserIdInReqParam = async (req, res, next) => {
     next();
   } catch (error) {
     console.log("Error while accessing the data", error.message);
-    return res.status(500).send({
+    return res.status(500).json({
       message: "Internal server error while reading the data",
     });
   }
@@ -68,23 +63,20 @@ const isValidUserIdInReqParam = async (req, res, next) => {
 const isValidJobIdInReqParam = async (req, res, next) => {
   if (!req.params.id) {
     return res.status(400).json({
-      success: false,
       message: "No jobId passed as parameter.",
     });
   }
   //check whether jobId is of valid ObjectId type or not
   if (!isValidObjectId(req.params.id)) {
     return res.status(400).json({
-      success: false,
       message: "Not a valid jobId.",
     });
   }
   try {
     const job = await Job.findOne({ _id: req.params.id });
-   
+
     if (job == null) {
       return res.status(400).json({
-        success: false,
         message: "Not a valid jobId.",
       });
     }

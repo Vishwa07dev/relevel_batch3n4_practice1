@@ -54,14 +54,12 @@ exports.signup = async (req, res) => {
     }
 
     return res.status(201).json({
-      success: true,
       message: "User created successfully.",
       data: filterUserResponse(user),
     });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({
-      success: false,
       message: "Internal server error , while creating the user.",
     });
   }
@@ -76,23 +74,19 @@ exports.signin = async (req, res) => {
     const user = await User.findOne({ userId });
     if (user == null) {
       return res.status(400).json({
-        success: false,
         message: "UserId does not exist.Provide a valid userId to signIn.",
       });
     }
     //user exists, now only allow user with APPROVED userStatus to continue,else return
     if (user.userStatus !== userStatuses.approved) {
       return res.status(400).json({
-        success: false,
         message: `UserStatus is not approved yet. Current userStatus is - ${user.userStatus}`,
       });
     }
     //check whether the password matches against the password in the database for the user, to validate the user
     const isPasswordMatched = bcrypt.compareSync(password, user.password);
     if (!isPasswordMatched) {
-      return res
-        .status(401)
-        .json({ success: false, message: " Password doesn't matched." });
+      return res.status(401).json({ message: " Password doesn't matched." });
     }
     //since user is validated,so create access token (using jsonwebtoken library) and send it along with other values in response body
     const token = jwt.sign({ id: user.userId }, authConfig.secret, {
@@ -100,13 +94,11 @@ exports.signin = async (req, res) => {
     });
     //send the response
     return res.status(200).json({
-      success: true,
       data: { ...filterUserResponse(user), accessToken: token },
     });
   } catch (error) {
     console.log("Internal error -> ", error.message);
     res.status(500).json({
-      success: false,
       message: "Some internal server error while signin",
     });
   }
