@@ -21,3 +21,21 @@ exports.validateCompany = async (req, res, next) => {
 
     next();
 }
+
+exports.validateCompanyRequestBody = async (req, res, next) => {
+
+    if (!req.body.name) {
+        return res.status(400).send({
+            message: "Failed ! Company name is not provided"
+        })
+    }
+
+    if (!req.body.address) {
+        return res.status(400).send({
+            message: "Failed ! Address is not provided"
+        })
+    }
+
+    next();
+
+}
