@@ -38,6 +38,19 @@ const isAdmin = async (req, res, next) => {
     }
 }
 
+const isCompanyAdmin = async (req, res, next) => {
+    const user = await User.findOne({userId : req.userId});
+
+    if(user && user.userType === constants.userTypes.companyAdmin){
+        next();
+    }
+    else{
+        return res.status(403).send({
+            message : "Only company admin can create the company."
+        });
+    }
+}
+
 const isValideUserReqParams = async (req, res, next) => {
     try {
         const user = await User.find({userId : req.params.id});
@@ -55,7 +68,7 @@ const isValideUserReqParams = async (req, res, next) => {
     }
 }
 
-const isAdminOrOwner = async (req, res, next) => {
+const isAdminOrCompanyAdmin = async (req, res, next) => {
     try{
         const callingUser = await User.findOne({userId : req.userId});
 
@@ -75,4 +88,4 @@ const isAdminOrOwner = async (req, res, next) => {
     }
 }
 
-module.exports = {verifyToken, isAdmin, isValideUserReqParams, isAdminOrOwner};
+module.exports = {verifyToken, isAdmin, isValideUserReqParams, isAdminOrCompanyAdmin};

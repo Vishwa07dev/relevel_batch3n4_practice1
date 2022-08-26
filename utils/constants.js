@@ -5,6 +5,7 @@ module.exports = {
     admin: "ADMIN",
     applicant: "APPLICANT",
     hr: "HR",
+    companyAdmin : "COMPANY_ADMIN"
   },
   userStatuses: {
     approved: "APPROVED",
