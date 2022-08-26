@@ -6,10 +6,9 @@ const User = require('../models/user.model');
 exports.createJob = async (req, res) => {
 
     try {
-        console.log("in++++++++")
-        console.log("userid-job.co", req.userId);
+
         const user = await User.findOne({ userId : req.userId });
-        console.log("user-job.con- ", user)
+
         const jobObj = {
             title : req.body.title,
             description : req.body.description,
@@ -18,7 +17,6 @@ exports.createJob = async (req, res) => {
         }
         console.log(jobObj);
         const JobCreated = await Job.create(jobObj);
-        // console.log("job-con, jobcre", jobsCreated);
 
         res.status(201).send(JobCreated);
     } catch (err) {
@@ -55,7 +53,7 @@ exports.applyForJob = async (req, res)  =>{
 
 exports.getAllJObs = async (req, res) => {
 
-    const user = await User.findOne({ userId : req.user.userId });
+    const user = await User.findOne({ userId : req.userId });
     const queryObj = {};
     const jobsApplied = user.jobsApplied;
     const jobsCreated = [];
