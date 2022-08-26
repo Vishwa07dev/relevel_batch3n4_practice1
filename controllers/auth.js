@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
+const Company = require("../models/company.model");
 const authConfig = require("../configs/auth.config");
 const constant = require("../utils/constants")
 
@@ -24,6 +25,14 @@ exports.signup = async (req, res) => {
         }
 
         const userResponse = await User.create(userDate);
+
+        if(companyId){
+            const companyResponse = await Company.findOne({_id: companyId});
+            companyResponse.hrs.push(userResponse._id)
+
+            await companyResponse.save();
+        }
+        
         res.status(201).send(userResponse);
     } catch (error) {
         res.status
