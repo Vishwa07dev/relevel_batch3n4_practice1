@@ -13,14 +13,15 @@ const verifyToken = (req, res, next) => {
         })
     }
 
-    jwt.verify(token, authConfig.secret, (error, decoded) =>  {
+    jwt.verify(token, authConfig.secret, async (error, decoded) =>  {
         if(error) {
             return res.status(401).send({
                 message : "UnAuthorized"
             });
         }
 
-        req.userId = decoded.id;
+        const user = await User.findOne({ userId : decoded.id });
+        req.user = user
         
         next();
     })
@@ -40,34 +41,41 @@ const isAdmin = async (req, res, next) => {
 }
 
 const isHr = async (req, res, next) => {
-    const user = await User.findOne({ userId : req.userId});
 
-    if(user && user.userType == constants.userTypes.hr){
-        if(req.body.postedBy){
+    // const user = await User.findOne({ userId : req.userId});
 
-            const newUser = await User.findOne({ userId : req.body.postedBy});
+    try {
 
-            if(newUser && newUser.userType == constants.userTypes.hr){
+        if(req.user && req.user.userType == constants.userTypes.hr){
+            if(req.body.postedBy){
+    
+                const newUser = await User.findOne({ userId : req.body.postedBy});
+    
+                if(newUser && newUser.userType == constants.userTypes.hr){
+                    next();
+                } else{
+                    res.status(403).send({
+                        message : "Only a hr user account can be updated to the postedBy"
+                    })
+                }
+            } else {
                 next();
-            } else{
-                res.status(403).send({
-                    message : "Only a hr user account can be updated to the postedBy"
-                })
             }
-        } else {
-            next();
+    
+        } else{
+            res.status(403).send({
+                message : "Only HR users are allowed to access this endPoint"
+            })
         }
-
-    } else{
-        res.status(403).send({
-            message : "Only HR users are allowed to access this endPoint"
+    } catch (err) {
+        console.log("Error while validaing isHr", err.message);
+        return res.status(500).send({
+            message: "Internal server error"
         })
     }
 }
 
 const isApplicant = async (req, res, next) => {
-
-    // const user = await User.findOne({userId : req.userId});
 
     if(req.userId == req.jobParams.postedBy){
         return res.status(403).send({
@@ -102,7 +110,7 @@ const isAdminOrOwner = async (req, res, next) => {
      */
 
     try {
-        const callingUser = await User.findOne({ userId: req.userId });  //req.userId was got from verifyToken middleware 
+        const callingUser = req.user  //req.userId was got from verifyToken middleware 
         if (callingUser.userType == constants.userTypes.admin || callingUser.userId == req.params.id) {
 
             if(callingUser.userType == constants.userTypes.admin){

@@ -7,7 +7,7 @@ exports.createJob = async (req, res) => {
 
     try {
 
-        const user = await User.findOne({ userId : req.userId });
+        const user = req.user;
 
         const jobObj = {
             title : req.body.title,
@@ -31,7 +31,7 @@ exports.applyForJob = async (req, res)  =>{
 
     try{
 
-        const user = await User.findOne({ userId : req.userId });
+        const user = req.user;
 
         user.jobsApplied.push(req.jobParams._id);
         req.jobParams.applicants.push(user._id);
@@ -51,54 +51,72 @@ exports.applyForJob = async (req, res)  =>{
     }
 } 
 
-exports.getAllJObs = async (req, res) => {
+exports.getAllMyJObs = async (req, res) => {
 
-    const user = await User.findOne({ userId : req.userId });
-    const queryObj = {};
-    const jobsApplied = user.jobsApplied;
-    const jobsCreated = [];
-    queryObj["_id"] = { $in: jobsApplied};
+    try {
 
-    if(user.userType == constants.userTypes.applicant){
-        if(!jobsApplied){
-            return res.status(200).send({
-                message : "No jobs applied by the user yet"
-            });
-        };
-    } else if (user.userType == constants.userTypes.hr){
+        const queryObj = {};
+        const jobsApplied = req.user.jobsApplied;
+        queryObj["_id"] = { $in: jobsApplied};
+    
+        const jobs = await Job.find(queryObj);
+    
+        res.status(200).send(jobs)
+    
+        
+    } catch (err) {
 
-        if(!jobsApplied && !jobsCreated.length){
-            return res.status(200).send({
-                message : "No jobs applied and no jobs created"
-            })
-        }
-        const jobs = await Job.where("postedBy").equals(user._id);
-
-        jobs.forEach(job => {
-            jobsCreated.push({
-                title : job.title,
-                description : job.description
-            })
-        })
-
-        console.log(queryObj, ": queryObj");
-    }
-
-    const jobs = await Job.find(queryObj);
-
-    if(jobsCreated.length){
-        res.status(200).send({
-            jobsApplied : {
-                jobs
-            },
-            jobsCreated : {
-                jobsCreated
-            }
+        console.log("some error while fetching all your jobs", err.message);
+        res.status(500).send({
+            message : "Some internal error "
         });
-    } else{
-        res.status(200).send(jobs);
     }
+    
 }
+
+exports.getAllJobs = async (req, res) => {
+
+    try {
+
+        const jobs = await Job.find();
+
+        res.status(200).send(jobs);
+    } catch (err) {
+
+        console.log("some error while fetching all jobs", err.message);
+        res.status(500).send({
+            message : "Some internal error "
+        });
+    }
+    
+}
+
+exports.getAllJobsCreated = async (req, res) => {
+
+    try {
+
+        const jobsCreated = [];
+        const jobs = await Job.where("postedBy").equals(req.user._id);
+    
+        if(jobs.length){
+            jobs.forEach(job => {
+                jobsCreated.push({
+                    title : job.title,
+                    description : job.description
+                })
+            });
+        }
+    
+        res.status(200).send(jobs);
+    } catch (err) {
+        console.log("some error while fetching jobs created ", err.message);
+        res.status(500).send({
+            message : "Some internal error "
+        });
+    }
+};
+
+
 
 exports.updateJob = async (req, res) => {
     try {
@@ -114,7 +132,7 @@ exports.updateJob = async (req, res) => {
         res.status(200).send(updatedJob);
 
     } catch (err) {
-        console.log("soem error while updating job", err.message);
+        console.log("some error while updating job", err.message);
         res.status(500).send({
             message : "Some internal error while updating the job"
         })

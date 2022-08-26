@@ -1,6 +1,6 @@
 const User = require("./models/user.model")
 const Company = require("./models/company.model");
-// const Job = require("./models/job.model");
+const Job = require("./models/job.model");
 const bcrypt = require('bcryptjs');
 
 /**
@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs');
  module.exports = async () => {
     try {
       await User.collection.drop();
-      //await Job.collection.drop();
+      await Job.collection.drop();
       //await Company.collection.drop();
   
       const adminUser = await User.create({
