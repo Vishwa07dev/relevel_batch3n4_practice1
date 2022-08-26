@@ -6,6 +6,7 @@ const { jobStatuses } = require("../utils/constants");
 
 const jobSchema = new mongoose.Schema(
   {
+    
     title: {
       type: String,
       required: true,
@@ -29,6 +30,7 @@ const jobSchema = new mongoose.Schema(
     },
     postedBy: {
       type: mongoose.SchemaTypes.ObjectId,
+      name: String,
       ref: "User",
     },
   },
@@ -36,3 +38,4 @@ const jobSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Job", jobSchema);
+
