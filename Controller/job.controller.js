@@ -27,6 +27,10 @@ exports.createJob = async (req, res) => {
       status: jobCreated.status,
       company: company.name,
     };
+    // if user has already applied to this job
+    if (req.user.jobsApplied.includes(req.params.id)) {
+      return res.status(400).send("You have already applied for this job, ");
+    }
     res.status(200).send({
       message: "You have successfully created a new job",
       responseMessage,
