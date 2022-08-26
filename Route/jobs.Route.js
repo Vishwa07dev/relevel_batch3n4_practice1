@@ -3,7 +3,7 @@ const { jwtAuth, jobMiddleware } = require("../middleware/index");
 
 module.exports = (app) => {
   app.post(
-    "/naukriApp/api/v1/jobCreation",
+    "/naukriApp/api/v1/jobCreations",
     [jwtAuth.verifyJWT, jobMiddleware.create],
     jobController.createJob
   );
@@ -13,7 +13,7 @@ module.exports = (app) => {
     jobController.findAllNecessaryJobDetails
   );
   app.get(
-    "/naukriApp/api/v1/applyForJob/:id",
+    "/naukriApp/api/v1/applyForJobs/:id",
     [jwtAuth.verifyJWT, jobMiddleware.applyForJob],
     jobController.applyForJob
   );
