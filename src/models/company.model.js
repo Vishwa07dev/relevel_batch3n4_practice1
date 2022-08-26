@@ -21,14 +21,6 @@ const companySchema = new mongoose.Schema(
         companyVerificationStatuses.rejected,
       ],
     },
-    jobsPosted: {
-      type: [mongoose.SchemaTypes.ObjectId],
-      ref: "Job",
-    },
-    hrs: {
-      type: [mongoose.SchemaTypes.ObjectId],
-      ref: "User",
-    },
   },
   { timestamps: true, versionKey: false }
 );
