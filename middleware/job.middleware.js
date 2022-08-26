@@ -124,6 +124,10 @@ exports.create = async (req, res, next) => {
   } else {
     req.body.status = constants.jobStatuses.active;
   }
+    // if user has already applied to this job
+    if (req.user.jobsApplied.includes(req.params.id)) {
+      return res.status(400).send("You have already applied for this job, ");
+    }
   next();
 };
 exports.applyForJob = async (req, res, next) => {
