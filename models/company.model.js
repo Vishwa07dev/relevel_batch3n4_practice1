@@ -7,14 +7,18 @@ const companySchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+      trim: true
     },
     address: {
       type: String,
       required: true,
     },
+    companyInfo: {
+      type: String,
+    },
     verified: {
       type: String,
-      default: companyVerificationStatuses.pending,
+      default: companyVerificationStatuses.approved,
       enum: [
         companyVerificationStatuses.approved,
         companyVerificationStatuses.pending,

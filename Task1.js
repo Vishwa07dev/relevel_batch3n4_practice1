@@ -30,5 +30,13 @@
  *    2. Initialize the DB with some initial seed data for these models 
  * 
  * 
+ * Task 2 : 
+ *      
+ *   Defining the  APIs for creating Jobs &  
+ *   APIs for students so that they can to apply for the Jobs.
+ * 
+ * 
+ * 
+ * 
  * 
  */
