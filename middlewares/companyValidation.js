@@ -18,6 +18,17 @@ exports.validateCompany = async (req, res, next) => {
         }
     }
 
+    if (req.params.companyId) {
+
+        let companyResponse = await Company.findOne({ _id: req.params.companyId });
+
+        if (!companyResponse) {
+            return res.status(400).send({
+                message: "Failed ! No Company is found with id " + req.body.companyId
+            })
+        }
+    }
+
 
     next();
 }
