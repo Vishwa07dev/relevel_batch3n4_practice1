@@ -14,7 +14,7 @@ const companySchema = new mongoose.Schema(
     },
     verified: {
       type: String,
-      default: companyVerificationStatuses.pending,
+      default: companyVerificationStatuses.approved,
       enum: [
         companyVerificationStatuses.approved,
         companyVerificationStatuses.pending,
@@ -29,6 +29,10 @@ const companySchema = new mongoose.Schema(
       type: [mongoose.SchemaTypes.ObjectId],
       ref: "User",
     },
+    companyAdmin : {
+      type : mongoose.SchemaTypes.ObjectId,
+      ref : "User",
+    }
   },
   { timestamps: true, versionKey: false }
 );
