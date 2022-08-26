@@ -4,4 +4,5 @@ if (process.NODE_ENV !== "production") {
 
 module.exports = {
   PORT: process.env.PORT,
+  secretKey: process.env.secretKey,
 };
