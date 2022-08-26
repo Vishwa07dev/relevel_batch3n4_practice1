@@ -5,7 +5,7 @@ module.exports = (app) => {
 
     app.post("/jobPortal/api/v1/job/create", [authJwt.verifyToken, authJwt.isHr, jobvalidator.vadlidatejobReqBody], jobcontroller.createJob);
 
-    app.post("/jobPortal/api/v1/job/apply/:id", [authJwt.verifyToken, jobvalidator.isValidJobIdInReqParam, authJwt.isApplicant], jobcontroller.applyForJob);
+    app.get("/jobPortal/api/v1/job/apply/:id", [authJwt.verifyToken, jobvalidator.isValidJobIdInReqParam, authJwt.isApplicant], jobcontroller.applyForJob);
 
     app.get("/jobPortal/api/v1/jobs/users", [authJwt.verifyToken], jobcontroller.getAllMyJObs);
 

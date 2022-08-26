@@ -35,7 +35,8 @@ const isValidJobIdInReqParam = async (req, res, next) => {
                 message : "jobId passed is not valid"
             })
         }
-        req.jobParams = job; 
+        req.jobParams = job;
+        console.log("req.params", job);
         
         next();
 
