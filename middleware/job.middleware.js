@@ -162,6 +162,10 @@ exports.applyForJob = async (req, res, next) => {
     if (doesJobExist.status !== constants.jobStatuses.active) {
       return res.status(400).send("This job is not accepting any more, ");
     }
+    // if user has already applied to this job
+    if (req.user.jobsApplied.includes(req.params.id)) {
+      return res.status(400).send("You have already applied for this job, ");
+    }
     next();
   } catch (err) {
     console.log(err);
