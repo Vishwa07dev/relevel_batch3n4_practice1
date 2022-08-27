@@ -7,6 +7,7 @@ const companySchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+      unique : true
     },
     address: {
       type: String,
@@ -20,14 +21,6 @@ const companySchema = new mongoose.Schema(
         companyVerificationStatuses.pending,
         companyVerificationStatuses.rejected,
       ],
-    },
-    jobsPosted: {
-      type: [mongoose.SchemaTypes.ObjectId],
-      ref: "Job",
-    },
-    hrs: {
-      type: [mongoose.SchemaTypes.ObjectId],
-      ref: "User",
     },
   },
   { timestamps: true, versionKey: false }
