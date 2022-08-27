@@ -40,15 +40,21 @@ exports.editJob = async (req,res)=>{
     if(req.user.userType == constants.userTypes.applicant){
         try{
 
-            req.user.jobsApplied.push(req.jobInParams._id);
-            req.user.save();
-    
-            req.jobInParams.applicants.push(req.user._id);
-            req.jobInParams.save();
-    
-            console.log(`#### ${req.user.name} applied for ${req.jobInParams.title} ####`);
-            res.status(201).send({message : "Job applicaion successfully submitted"});
-    
+            if(req.jobInParams.status == constants.jobStatuses.active){
+                req.user.jobsApplied.push(req.jobInParams._id);
+                req.user.save();
+        
+                req.jobInParams.applicants.push(req.user._id);
+                req.jobInParams.save();
+        
+                console.log(`#### ${req.user.name} applied for ${req.jobInParams.title} ####`);
+                res.status(201).send({message : "Job applicaion successfully submitted"});
+            }else{
+                res.status(403).send({
+                    message : "The job opening has expired"
+                });
+            }
+
         }catch(err){
             console.log("#### Error while applying for the job #### ", err.message);
             res.status(500).send({
