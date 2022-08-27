@@ -1,30 +1,25 @@
-const User = require('../models/user.model');
 const Job = require('../models/job.model');
-const Company = require('../models/company.model');
-const constants = require('../utils/constants');
 
 
-exports.CreateJob = async ( req, res)=>{
+exports.createJob = async ( req, res)=>{
     
     try{
 
-        const user = await User.findOne({userId : req.userId});
-        console.log(user._id);
+        console.log(req.id);
         let jobObj = {
             title : req.body.title,
             description : req.body.description,
             status : req.body.status,
-            company : req.query.id,
-            postedBy : user._id
+            company : req.company._id,
+            postedBy : req.id
         }
 
         const job = await Job.create(jobObj);
-        const company = await Company.findById(req.query.id);
+        const company = req.company;
         console.log(req.query.id);
         company.jobsPosted.push(job._id);
-        company.hrs.push(user._id);
         await company.save();
-        res.status(200).send({
+        res.status(201).send({
             title : job.title,
             description : job.description,
             status : job.status,

@@ -1,4 +1,3 @@
-const User = require('../models/user.model');
 const Company = require("../models/company.model");
 const constants = require('../utils/constants');
 
@@ -38,13 +37,10 @@ exports.findAllCompanies = async ( req, res)=>{
 
 exports.verifyTheCompany = async ( req, res) =>{
     try{
-        const updateCompany = await Company.findByIdAndUpdate(
-            { _id : req.params.id},
-            {
-                verified : constants.companyVerificationStatuses.approved
-            },
-            {new : true}
-        )
+        
+        const updateCompany = await Company.findOne({_id : req.params.id});
+        updateCompany.verified = constants.companyVerificationStatuses.approved
+        await updateCompany.save();
 
         res.status(201).send({
             message : "Successfully approved !",

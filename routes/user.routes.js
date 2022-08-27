@@ -3,8 +3,7 @@ const {authJwt} = require('../middleware');
 
 module.exports = (app) =>{
 
-    app.post("/naukari/api/v1/user/:id",[authJwt.verifyToken, authJwt.isAdmin], userController.VerifyTheHR);
+    app.put("/naukari/api/v1/users/:id",[authJwt.verifyToken, authJwt.isAdmin], userController.verificationTheHr);
 
-    app.post("/naukari/api/v1/user/apply/:jobId",[authJwt.verifyToken], userController.applyTheJob);
 
 }

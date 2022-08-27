@@ -2,14 +2,14 @@ const User = require('../models/user.model');
 const constants = require('../utils/constants');
 const Job = require('../models/job.model');
 
-exports.VerifyTheHR = async(req, res)=>{
+exports.verificationTheHr = async(req, res)=>{
 
     try{
-        const user = await User.findOneAndUpdate(
-            {_id : req.params.id},
-            {userStatus : constants.userStatuses.approved},
-            {new : true}
+        const user = await User.findOne(
+            {_id : req.params.id}
         )
+        user.userStatus = constants.userStatuses.approved;
+        await user.save();
         res.status(202).send({
             message : "User Approved Successfully",
             user : user
