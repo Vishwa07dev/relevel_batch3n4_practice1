@@ -1,5 +1,3 @@
-const company = require('../models/company.model');
-
 const vadlidationOfCompanyBody = async (req, res, next) => {
 
     try{
@@ -12,6 +10,11 @@ const vadlidationOfCompanyBody = async (req, res, next) => {
         if (!req.body.address) {
             return res.status(400).send({
                 message: "Failed ! company address is not provided"
+            });
+        }
+        if (!req.body.verified) {
+            return res.status(400).send({
+                message: "Failed ! company is not verified"
             });
         }
 

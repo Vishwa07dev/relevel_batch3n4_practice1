@@ -113,6 +113,30 @@ exports.getAllJobsCreated = async (req, res) => {
 
 
 
+exports.getAllApplicantsFOrTheJob = async (req, res) => {
+
+    try {
+
+        const queryObj = {};
+        const jobsApplied = req.user.jobsApplied;
+        queryObj["_id"] = { $in: jobsApplied};
+    
+        const jobs = await Job.find(req.jobParams._id);
+    
+        res.status(200).send(jobs)
+    
+        
+    } catch (err) {
+
+        console.log("some error while fetching all your jobs", err.message);
+        res.status(500).send({
+            message : "Some internal error "
+        });
+    }
+    
+}
+
+
 exports.updateJob = async (req, res) => {
     try {
         const job = await Job.findOne({"_id": req.params.id});

@@ -7,6 +7,6 @@ module.exports = (app) => {
 
     app.get("/jobPortal/api/v1/user/:id", [authJwt.verifyToken, authJwt.isValidUserIdInReqParam ,authJwt.isAdminOrOwner,], userController.findByUserId);
 
-    app.put("/jobPortal/api/v1/user/update/:id", [authJwt.verifyToken, authJwt.isValidUserIdInReqParam, authJwt.isAdminOrOwner], userController.update);
+    app.put("/jobPortal/api/v1/users/:id", [authJwt.verifyToken, authJwt.isValidUserIdInReqParam, authJwt.isAdminOrOwner], userController.update);
 
 }

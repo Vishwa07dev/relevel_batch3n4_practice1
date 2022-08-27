@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const Company = require('../models/company.model');
 const constants = require("../utils/constants")
 
 const validateSignUpRequestBody = async (req, res, next) => {
@@ -21,6 +22,25 @@ const validateSignUpRequestBody = async (req, res, next) => {
         if (user != null) {
             return res.status(400).send({
                 message: "Failed ! UserId is already taken"
+            })
+        }
+    } catch (err) {
+
+        return res.status(500).send({
+            message: "Internal server error while validating the request"
+        })
+    }
+
+    if (!req.body.companyId) {
+        return res.status(400).send({
+            message: "Failed ! companyId is not provided"
+        })
+    }
+    try {
+        const company = await Company.findOne({ userId: req.body.companyId });
+        if (!company) {
+            return res.status(400).send({
+                message: "Failed ! company is not present"
             })
         }
     } catch (err) {
