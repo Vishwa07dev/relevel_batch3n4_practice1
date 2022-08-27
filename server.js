@@ -1,3 +1,5 @@
+const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const dbConfig = require("./configs/db.config");
@@ -5,6 +7,16 @@ const serverConfig = require("./configs/server.config");
 const User = require("./models/user.model");
 const Company = require("./models/company.model");
 const Job = require("./models/job.model");
+
+const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+
+app.get('/',(req,res)=>{
+  res.status(200).send({
+    message : "api working"
+  })
+})
 
 /**
  * Initialize the connection to the mongoDB
@@ -16,7 +28,7 @@ db.on("error", () => {
 });
 db.once("open", () => {
   console.log("Connected to mongoDB");
-  init();
+  //init();
 });
 
 /**
@@ -96,3 +108,12 @@ async function init() {
     console.log("err in db initialization , " + err);
   }
 }
+
+require('./routes/auth.routes')(app);
+require('./routes/company.routes')(app);
+require('./routes/job.routes')(app);
+require('./routes/user.routes')(app);
+
+app.listen(serverConfig.PORT,()=>{
+  console.log(`Server Start at PORT ${serverConfig.PORT}`)
+})

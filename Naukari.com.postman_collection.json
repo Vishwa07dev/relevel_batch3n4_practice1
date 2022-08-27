@@ -1,0 +1,378 @@
+{
+	"info": {
+		"_postman_id": "8da86aee-f5e9-4d66-855b-c2671c499e2b",
+		"name": "Naukari.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20018924"
+	},
+	"item": [
+		{
+			"name": "Sign Up",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"test1\",\r\n    \"userId\" : \"test1\",\r\n    \"email\" : \"test1@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"userType\" : \"APPLICANT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/naukari/api/v1/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"naukari",
+						"api",
+						"v1",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign Up for HR",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"user01\",\r\n    \"userId\" : \"user01\",\r\n    \"email\" : \"user01@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"userType\" : \"HR\",\r\n    \"companyId\" : \"6308c65fd70a4b94265f2b91\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/naukari/api/v1/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"naukari",
+						"api",
+						"v1",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign In",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\" : \"test1\",\r\n    \"password\" : \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/naukari/api/v1/auth/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"naukari",
+						"api",
+						"v1",
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create the Company",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkbWluIiwiaWF0IjoxNjYxNTE3Mjc0LCJleHAiOjE2NjE1MTc4NzR9.i2yRZNeOqvFNNn42Bxga5cB2pVz_q8opm6WQQttcoE0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"FaceBook\",\r\n    \"address\" : \"United States\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/naukari/api/v1/company/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"naukari",
+						"api",
+						"v1",
+						"company",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify the company",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkbWluIiwiaWF0IjoxNjYxNTE3Mjc0LCJleHAiOjE2NjE1MTc4NzR9.i2yRZNeOqvFNNn42Bxga5cB2pVz_q8opm6WQQttcoE0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/naukari/api/v1/company/6308be957e82977a6bd6fbbe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"naukari",
+						"api",
+						"v1",
+						"company",
+						"6308be957e82977a6bd6fbbe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch All the companies",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkbWluIiwiaWF0IjoxNjYxNTE2OTc1LCJleHAiOjE2NjE1MTc1NzV9.gJWDlr8r8nKMHXvsk8IMHFqv0YPuqNk_c4ZJBJ66JOo",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"FaceBook\",\r\n    \"address\" : \"United States\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/naukari/api/v1/company/companies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"naukari",
+						"api",
+						"v1",
+						"company",
+						"companies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create the Job",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVzZXIwMSIsImlhdCI6MTY2MTUxNzUxNCwiZXhwIjoxNjYxNTE4MTE0fQ.h-Mjz9lBwo3f-EIQM4iu1RInClvslWUF1lTI_19y0PA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\" : \"Front-end Devloper\",\r\n    \"description\" : \"HTML CSS javascript reactJS angularJS ejs bootStrap\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/naukari/api/v1/job/create?id=6308be957e82977a6bd6fbbe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"naukari",
+						"api",
+						"v1",
+						"job",
+						"create"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "6308be957e82977a6bd6fbbe"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify the HR",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkbWluIiwiaWF0IjoxNjYxNTE3Mjc0LCJleHAiOjE2NjE1MTc4NzR9.i2yRZNeOqvFNNn42Bxga5cB2pVz_q8opm6WQQttcoE0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/naukari/api/v1/user/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"naukari",
+						"api",
+						"v1",
+						"user",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "6308bea87e82977a6bd6fbc2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find all the jobs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkbWluIiwiaWF0IjoxNjYxNTEzMDI4LCJleHAiOjE2NjE1MTM2Mjh9.vK47qgNbhvzvIRQmjzh_cl9fgb2tLYBvN59fEeWEutw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\" : \"Front-end Devloper\",\r\n    \"description\" : \"HTML CSS javascript reactJS angularJS ejs bootStrap\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/naukari/api/v1/job",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"naukari",
+						"api",
+						"v1",
+						"job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Apply the Job",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InRlc3QxIiwiaWF0IjoxNjYxNTE4MzIzLCJleHAiOjE2NjE1MTg5MjN9.mWWDb8otTFWPG-HLCERVQCsfjzlUO-rXt_oHzrQXpQc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\" : \"Front-end Devloper\",\r\n    \"description\" : \"HTML CSS javascript reactJS angularJS ejs bootStrap\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/naukari/api/v1/user/apply/:jobId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"naukari",
+						"api",
+						"v1",
+						"user",
+						"apply",
+						":jobId"
+					],
+					"variable": [
+						{
+							"key": "jobId",
+							"value": "6308bf097e82977a6bd6fbcb"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
