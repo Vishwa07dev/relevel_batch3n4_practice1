@@ -78,6 +78,7 @@ const isAdminOrHr = async (req, res, next) => {
       //if userType is admin, pass the control to next
       //adding an extra key to req so when admin user tries to create a job,it can be used
       req.isAdmin = true;
+      req.user = user;
       next();
     } else if (user && user.userType === userTypes.hr) {
       //if usertype is hr, check whether the companyID is listed in the hr records or not
@@ -99,6 +100,7 @@ const isAdminOrHr = async (req, res, next) => {
               "No access allowed to the user for this requested endpoint. The Company is not having approved status.Contact admin for more details.",
           });
         } else {
+          req.user = user;
           //all validation passed,
           next();
         }
@@ -177,10 +179,7 @@ const isOwnerOrApplicantOrAdmin = async (req, res, next) => {
           "Only the owner of this Job or Admin or Applicant with approved status is allowed to update the job.",
       });
     }
-  } else if (
-    signedInUser.userType === userTypes.applicant &&
-    signedInUser.userStatus !== userStatuses.approved
-  ) {
+  } else if (signedInUser.userType === userTypes.applicant) {
     //ensure whether the user applicant has been already applied for job, if true  then return from here only
     const user = await User.findOne({ userId: req.userId });
     if (job.applicants.includes(user._id)) {
@@ -191,6 +190,7 @@ const isOwnerOrApplicantOrAdmin = async (req, res, next) => {
     }
   }
   //all validations passed
+  req.user = signedInUser;
   next();
 };
 module.exports = {

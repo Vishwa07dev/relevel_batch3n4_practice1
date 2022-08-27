@@ -41,6 +41,9 @@ exports.validateJobRequestBody = async (req, res, next) => {
       return res.status(400).json({
         message: "Not valid CompanyId.",
       });
+    } else {
+      //bind the company to req, so to avoid db call
+      req.company = company;
     }
   }
   //all validation passed

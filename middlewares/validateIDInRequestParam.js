@@ -84,6 +84,8 @@ const isValidJobIdInReqParam = async (req, res, next) => {
       });
     }
     //valid jobId,pass the control to next
+    //bind the job to the req
+    req.job = job;
     next();
   } catch (error) {
     console.log("Error while accessing the  info", error.message);

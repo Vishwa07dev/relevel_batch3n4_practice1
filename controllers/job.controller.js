@@ -9,28 +9,33 @@ const { jobStatuses, userTypes, userStatuses } = require("../utils/constants");
 exports.create = async (req, res) => {
   try {
     //isAdminOrHr validation already done in middleware
-    //fetch the signedInUser details
-    const signedInUser = await User.findOne({ userId: req.userId });
+    //fetch the signedInUser details already binded in req.user
 
     let jobObjectToBeStoredInDB = {
       title: req.body.title,
       description: req.body.description,
-      postedBy: signedInUser._id,
+      postedBy: req.user._id,
     };
 
-    //check if the signedInuser is hr then take the companyId from there, else consider req.body (since admin has passed that)
+    //check if the signedInuser is hr then take the companyId from there, else consider req.company (since admin has passed that)
     if (req.isAdmin == true) {
-      jobObjectToBeStoredInDB.company = req.body.companyId;
+      jobObjectToBeStoredInDB.company = req.company._id;
     } else {
-      jobObjectToBeStoredInDB.company = signedInUser.companyId;
+      jobObjectToBeStoredInDB.company = req.user.companyId;
     }
 
     const job = await Job.create(jobObjectToBeStoredInDB);
 
-    //update the compnay jobsPosted too
-    const company = await Company.findOne({ _id: job.company });
-    company.jobsPosted.push(job._id);
-    await company.save();
+    //update the company jobsPosted too,need to
+    if (req.isAdmin) {
+      req.company.jobsPosted.push(job._id);
+      await req.company.save();
+    } else {
+      //need to find the Company of the hr and update there
+      const company = await Company.findOne({ _id: req.user.companyId });
+      company.jobsPosted.push(job._id);
+      await company.save();
+    }
 
     return res.status(201).json({
       successs: true,
@@ -76,15 +81,13 @@ exports.findAll = async (req, res) => {
 
 exports.findOne = async (req, res) => {
   try {
-    const job = await Job.findOne({ _id: req.params.id });
     //exclude the all job.applicant id property detail only if req.userId is applicant
 
-    const user = await User.findOne({ userId: req.userId });
-    if (user.userType == userTypes.applicant) {
-      job.applicants = undefined; //so applicant user cant know the ids of the other user
+    if (req.user.userType == userTypes.applicant) {
+      req.job.applicants = undefined; //so applicant user cant know the ids of the other user
     }
     return res.status(200).json({
-      data: job,
+      data: req.job,
     });
   } catch (error) {
     console.log("Error while fetching job details.", error.message);
@@ -97,34 +100,28 @@ exports.findOne = async (req, res) => {
 exports.update = async (req, res) => {
   //depending on userType, update is allowed
   try {
-    const signedInUser = await User.findOne({
-      userId: req.userId,
-    });
-
-    const job = await Job.findOne({ _id: req.params.id });
-
     //check if job status is active then only applicant(with approved status) will be able to apply for job
     if (
-      signedInUser.userType === userTypes.applicant &&
-      signedInUser.userStatus === userStatuses.approved
+      req.user.userType === userTypes.applicant &&
+      req.user.userStatus === userStatuses.approved
     ) {
-      if (job.status === jobStatuses.expired) {
+      if (req.job.status === jobStatuses.expired) {
         return res.status(400).json({
           message: "Job is not active, its already expired.",
         });
       } else {
         //update the job and user
-        job.applicants.push(signedInUser._id);
-        await job.save();
-        signedInUser.jobsApplied.push(job._id);
-        await signedInUser.save();
+        req.job.applicants.push(req.user._id);
+        await req.job.save();
+        req.user.jobsApplied.push(req.job._id);
+        await req.user.save();
 
         return res.status(200).json({
           message: "Job application is successfull.",
         });
       }
     }
-    //now the signedInUser will be either owner or admin, so update is allowed, in update only job status change is allowed.
+    //now the req.user will be either owner or admin, so update is allowed, in update only job status change is allowed.
     if (req.body.status) {
       if (
         ![jobStatuses.active, jobStatuses.expired].includes(req.body.status)
@@ -135,14 +132,15 @@ exports.update = async (req, res) => {
         });
       } else {
         //save the job
-        job.status = req.body.status;
-        job.title = req.body.title !== undefined ? req.body.title : job.title;
-        job.description =
+        req.job.status = req.body.status;
+        req.job.title =
+          req.body.title !== undefined ? req.body.title : req.job.title;
+        req.job.description =
           req.body.description !== undefined
             ? req.body.description
-            : job.description;
+            : req.job.description;
 
-        const updatedJob = await job.save();
+        const updatedJob = await req.job.save();
         return res.status(200).json({
           message: "Job updated is successfully done.",
           data: updatedJob,
