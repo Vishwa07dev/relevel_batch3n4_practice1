@@ -4,8 +4,6 @@ exports.createJob = async (req, res) => {
 
     try {
 
-        const user = req.user;
-
         const jobObj = {
             title : req.body.title,
             description : req.body.description,
