@@ -6,6 +6,14 @@ const validateNewCompanyBody = (req,res,next)=>{
             message: "Failed ! Company name is not provided"
         });
     }
+
+    const company = await Company.findOne({name : req.body.name});
+
+    if(company){
+        return res.status(400).send({
+            message: "Failed ! Company name already exists"
+        });
+    }
     
     next();
 }
