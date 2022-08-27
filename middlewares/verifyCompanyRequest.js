@@ -1,6 +1,6 @@
 const Company = require('../models/company.model')
 
-const validateNewCompanyBody = (req,res,next)=>{
+const validateNewCompanyBody = async (req,res,next)=>{
     if (!req.body.name) {
         return res.status(400).send({
             message: "Failed ! Company name is not provided"
