@@ -19,13 +19,21 @@ module.exports = async ()=>{
             console.log("#### Initial data is already present ####");
             return;
         }else{
+
+            const admincompany = await Company.create({
+                name : "ADMIN",
+            });
+            console.log("#### Admin company created ####");
+
+
             await User.create({
                 name : "Dharmit Lakhani",
                 username : "admin",
                 password : bcrypt.hashSync("itsonlyDharmit#9", 10),
                 email : "dharmitmailer+jobadmin@gmail.com",
                 userType : constants.userTypes.admin,
-                emailVerified : true
+                emailVerified : true,
+                companyId : admincompany._id
             });
             console.log("#### Admin user created ####");
 

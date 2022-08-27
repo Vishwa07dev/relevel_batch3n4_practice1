@@ -1,11 +1,13 @@
-const verifyBody = require('./verifyRequestBody')
+const verifyUserReq = require('./verifyUserRequest')
+const verifyJobReq = require('./verifyJobRequest')
+const verifyCompanyReq = require('./verifyCompanyRequest')
 const authJwt = require('./authjwt')
-const verifyJob = require('../middlewares/jobValidator')
 const verifyTokens = require('./tokenValidator')
 
 module.exports = {
-    verifyBody,
+    verifyUserReq,
+    verifyJobReq,
+    verifyCompanyReq,
     authJwt,
-    verifyJob,
     verifyTokens
 }

@@ -1,5 +1,6 @@
 require('dotenv').config();
 const User = require('../models/user.model')
+const Company = require('../models/company.model')
 const constants = require('../utils/constants')
 
 const isValidEmail = (email)=>{ // checks valid email format
@@ -82,6 +83,22 @@ const validateSignUpRequestBody = async (req,res,next)=>{
                 message : "UserType provided is not correct. Possible correct values : APPLICANT | HR"
             });
         }
+
+        if(req.body.userType == constants.userTypes.hr){
+            if(!req.body.companyId){
+                return res.status(400).send({
+                    message : "CompanyId is required for HR registration"
+                });
+            }else{
+                const company = await Company.findOne({_id: req.body.companyId});
+                if(!company){
+                    return res.status(400).send({
+                        message : "CompanyId provided does not match with any company"
+                    });
+                }
+                req.company = company
+            }
+        }
     
         next();
 
@@ -127,34 +144,6 @@ const validateNewPassword = (req,res,next)=>{
     next();
 }
 
-const validateNewJobBody = async (req,res,next)=>{
-    try{
-        if (!req.body.title) {
-            return res.status(400).send({
-                message: "Failed ! Job title is not provided"
-            });
-        }
-    
-        if (!req.body.description) {
-            return res.status(400).send({
-                message: "Failed ! Job description is not provided"
-            });
-        }
-
-        if (req.body.vacancies && req.body.vacancies < 1){
-            return res.status(400).send({
-                message: "Minimum number of vacancies is 1"
-            });
-        }
-    
-        next();
-    }catch{
-        console.log("#### Error while velidating new job body ##### ", err.message);
-        res.status(500).send({
-            message : "Internal server error while job validation"
-        });
-    }
-}
 
 const validateUserUpdateBody = (req,res,next)=>{
 
@@ -186,7 +175,6 @@ const verifyRequestBodiesForAuth = {
     validateSignUpRequestBody,
     validateSignInRequestBody,
     validateNewPassword,
-    validateNewJobBody,
     validateUserUpdateBody
 };
 

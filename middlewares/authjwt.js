@@ -5,7 +5,7 @@ const isAdmin = (req,res,next)=>{
 
     const user = req.user
 
-    if (user && user.userType == constants.userTypes.admin){
+    if (user.userType == constants.userTypes.admin){
         next();
     }else{
         return res.status(403).send({
@@ -14,15 +14,15 @@ const isAdmin = (req,res,next)=>{
     }
 }
 
-const isHr = (req,res,next)=>{
+const isAdminOrHr = (req,res,next)=>{
 
     const user = req.user
 
-    if (user && user.userType == constants.userTypes.hr){
+    if (user.userType == constants.userTypes.hr || user.userType == constants.userTypes.admin){
         next();
     }else{
         return res.status(403).send({
-            message : "only HRs are allowed to access this endpoint"
+            message : "only admins and HRs are allowed to access this endpoint"
         })
     }
 }
@@ -89,7 +89,7 @@ const isAdminOrOwner = (req,res,next)=>{
 
 const authJwt = {
     isAdmin,
-    isHr,
+    isAdminOrHr,
     isApplicant,
     isValidUsernameInReqParam,
     isAdminOrOwner

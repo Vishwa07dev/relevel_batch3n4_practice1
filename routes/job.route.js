@@ -1,7 +1,7 @@
 const jobController = require('../controllers/job.controller');
-const {verifyJob, authJwt, verifyTokens, verifyBody} = require('../middlewares')
+const {authJwt, verifyTokens, verifyJobReq} = require('../middlewares')
 
 module.exports = (app)=>{
-    app.post("/job/api/v1/jobs/create", [verifyTokens.userToken, authJwt.isHr, verifyBody.validateNewJobBody], jobController.createJob);
-    app.get("/job/api/v1/jobs/apply/:id", [verifyTokens.userToken, authJwt.isApplicant, verifyJob.isValidJobIdInReqParam], jobController.applyJob)
+    app.post("/job/api/v1/jobs/", [verifyTokens.userToken, authJwt.isAdminOrHr, verifyJobReq.validateNewJobBody], jobController.createJob);
+    app.put("/job/api/v1/jobs/:id", [verifyTokens.userToken, verifyJobReq.isValidJobIdInReqParam, verifyJobReq.validateJobUpdateBody], jobController.editJob)
 }

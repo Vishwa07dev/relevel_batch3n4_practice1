@@ -14,6 +14,7 @@ const jobSchema = new mongoose.Schema({
     },
     vacancies : {
         type : Number,
+        default : 1,
         minimum : 1
     },
     postedBy : {
@@ -28,6 +29,7 @@ const jobSchema = new mongoose.Schema({
     },
     applicants: {
         type : [mongoose.SchemaTypes.ObjectId],
+        default : [],
         ref : "user"
     },
     status : {

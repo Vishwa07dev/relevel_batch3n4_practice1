@@ -14,16 +14,14 @@ const companySchema = new mongoose.Schema({
         type : String,
         trim: true
     },
-    activeJobsPosted: {
+    jobsPosted: {
         type: [mongoose.SchemaTypes.ObjectId],
-        ref: "job",
-    },
-    expiredJobsPosted: {
-        type: [mongoose.SchemaTypes.ObjectId],
+        default : [],
         ref: "job",
     },
     hr : {
         type : [mongoose.SchemaTypes.ObjectId],
+        default : [],
         ref : "user"
     },
 },

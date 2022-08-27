@@ -38,21 +38,14 @@ const userSchema = new mongoose.Schema({
         default : constants.userStatuses.approved,
         enum : [constants.userStatuses.approved, constants.userStatuses.pending, constants.userStatuses.rejected]
     },
-    emailVerified : {
-        type : Boolean,
-        required : true,
-        default : false
-    },
     jobsApplied : {
         type : [mongoose.SchemaTypes.ObjectId],
+        default : [],
         ref : "job"
     },
-    activeJobsPosted : {
+    jobsPosted : {
         type : [mongoose.SchemaTypes.ObjectId],
-        ref : "job"
-    },
-    expiredJobsPosted : {
-        type : [mongoose.SchemaTypes.ObjectId],
+        default : [],
         ref : "job"
     },
     companyId : {
