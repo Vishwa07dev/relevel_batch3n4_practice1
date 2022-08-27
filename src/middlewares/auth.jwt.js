@@ -5,7 +5,8 @@ const constants = require('../utils/constants');
 
 const verifyToken = (req, res, next) => {
 
-    const token = req.headers["x-access-token"];
+console.log(authConfig.tokenHeader, ": ---tokenheader")
+    const token = req.headers[authConfig.tokenHeader];
 
     if(!token) {
         return res.status(403).send({
@@ -22,27 +23,32 @@ const verifyToken = (req, res, next) => {
 
         const user = await User.findOne({ userId : decoded.id });
         req.user = user
-        
+        //console.log("token -next", req.params.id);
         next();
     })
 
 }
 
 const isAdmin = async (req, res, next) => {
-    const user = await User.findOne({ userId : req.userId});
+    console.log("isadmin")
+    try {
 
-    if(user && user.userType == constants.userTypes.admin){
-        next();
-    } else{
-        res.status(403).send({
-            message : "Only ADMIN users are allowed to access this endPoint"
-        })
+        if(req.user && req.user.userType == constants.userTypes.admin){
+            next();
+        } else{
+            res.status(403).send({
+                message : "Only ADMIN users are allowed to access this endPoint"
+            })
+        }
+    } catch (err) {
+        console.log("Error while validaing isadmin", err.message);
+        return res.status(500).send({
+            message: "Internal server error"
+        });
     }
 }
 
 const isHr = async (req, res, next) => {
-
-    // const user = await User.findOne({ userId : req.userId});
 
     try {
 
@@ -77,11 +83,23 @@ const isHr = async (req, res, next) => {
 
 const isApplicant = async (req, res, next) => {
 
-    if(req.userId == req.jobParams.postedBy){
-        return res.status(403).send({
-            message : "hr user of the same job can't apply to the job"
-        })
+    try {
+        console.log("req.user.userId :", req.user.userId, "-----", req.jobParams.postedBy)
+
+        if(req.user.id == req.jobParams.postedBy){
+            return res.status(403).send({
+                message : "hr user of the same job can't apply to the job"
+            })
+        }
+        next();
+    } catch(err) {
+        console.log("Error :", err.message);
+        
+        return res.status(500).send({
+            message: "Internal server error "
+        });
     }
+
 }
 
 const isValidUserIdInReqParam = async (req, res, next) => {
@@ -93,21 +111,19 @@ const isValidUserIdInReqParam = async (req, res, next) => {
             })
         }
         next();
-    } catch (err) {
-        console.log("Error while reading the user info", err.message);
+    } catch (err) { 
+        console.log("Error :", err.message);
+        
         return res.status(500).send({
-            message: "Internal server error while reading the user data"
-        })
+            message: "Internal server error "
+        });
     }
 }
 
 
 
 const isAdminOrOwner = async (req, res, next) => {
-    /**
-     * Either the caller should be the ADMIN or the caller should be the
-     * owner of the userId
-     */
+
 
     try {
         const callingUser = req.user  //req.userId was got from verifyToken middleware 

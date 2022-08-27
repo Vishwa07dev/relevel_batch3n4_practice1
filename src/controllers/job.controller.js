@@ -15,7 +15,7 @@ exports.createJob = async (req, res) => {
             company : user.companyId,
             postedBy : user._id
         }
-        console.log(jobObj);
+        console.log("jobObj : ", jobObj);
         const JobCreated = await Job.create(jobObj);
 
         res.status(201).send(JobCreated);
@@ -30,14 +30,14 @@ exports.createJob = async (req, res) => {
 exports.applyForJob = async (req, res)  =>{
 
     try{
-
+       
         const user = req.user;
 
         user.jobsApplied.push(req.jobParams._id);
         req.jobParams.applicants.push(user._id);
 
         await user.save();
-        await req.jobInParams.save();
+        await req.jobParams.save();
 
         res.status(201).send({
             message : "Job applicaion successfully submitted"

@@ -1,6 +1,6 @@
 const Job = require('../models/job.model');
 
-const vadlidatejobReqBody = async (req, res, next) => {
+const vadlidationOfJobReqBody = async (req, res, next) => {
 
     try{
 
@@ -24,7 +24,7 @@ const vadlidatejobReqBody = async (req, res, next) => {
     }
 }
 
-const isValidJobIdInReqParam = async (req, res, next) => {
+const isValidJobIdInParam = async (req, res, next) => {
 
     try{
 
@@ -36,7 +36,7 @@ const isValidJobIdInReqParam = async (req, res, next) => {
             })
         }
         req.jobParams = job;
-        console.log("req.params", job);
+        console.log("req.params", job, "- ", req.params.id);
         
         next();
 
@@ -49,6 +49,6 @@ const isValidJobIdInReqParam = async (req, res, next) => {
 }
 
 module.exports = {
-    vadlidatejobReqBody : vadlidatejobReqBody,
-    isValidJobIdInReqParam : isValidJobIdInReqParam
+    vadlidationOfJobReqBody : vadlidationOfJobReqBody,
+    isValidJobIdInParam : isValidJobIdInParam
 }

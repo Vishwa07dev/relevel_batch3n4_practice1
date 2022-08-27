@@ -25,6 +25,7 @@ db.once("open", () => {
 require('./src/routes/auth.route')(app);
 require('./src/routes/job.route')(app);
 require('./src/routes/user.route')(app);
+require('./src/routes/company.route')(app);
 
 app.listen(serverConfig.PORT, () => {
     console.log(`Server is up and running in the port no : ${serverConfig.PORT}`);

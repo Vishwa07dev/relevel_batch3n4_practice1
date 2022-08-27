@@ -10,7 +10,7 @@ const bcrypt = require('bcryptjs');
     try {
       await User.collection.drop();
       await Job.collection.drop();
-      //await Company.collection.drop();
+      await Company.collection.drop();
   
       const adminUser = await User.create({
         name: "admin",

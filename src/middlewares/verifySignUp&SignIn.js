@@ -3,14 +3,14 @@ const constants = require("../utils/constants")
 
 const validateSignUpRequestBody = async (req, res, next) => {
 
-    // Validate if name is present
+    
     if (!req.body.name) {
         return res.status(400).send({
             message: "Failed ! User name is not provided"
         })
     }
 
-    // Validate if the userId is present and it's not duplicate
+    
     if (!req.body.userId) {
         return res.status(400).send({
             message: "Failed ! UserId is not provided"
@@ -30,19 +30,13 @@ const validateSignUpRequestBody = async (req, res, next) => {
         })
     }
 
-    //Validate if the password is present or not
-    /**
-     * Logic to do extra valdiations :
-     * 1. it should be of minimum length 10
-     * 2. Alphabets, numerics and special character atleanst one
-     */
     if (!req.body.password) {
         return res.status(400).send({
             message: "Failed ! Password is not provided"
         })
     }
 
-    //Validate if the email is present, is valid and not duplicate
+    
     if (!req.body.email) {
         return res.status(400).send({
             message: "Failed ! Email is not provided"
@@ -74,8 +68,7 @@ const validateSignUpRequestBody = async (req, res, next) => {
         }
     }
 
-    next(); // Give conrol to the next middleware or controller
-
+    next(); 
 }
 
 
