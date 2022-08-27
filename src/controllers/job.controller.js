@@ -1,7 +1,4 @@
-const constants = require('../utils/constants');
 const Job = require('../models/job.model');
-const User = require('../models/user.model');
-
 
 exports.createJob = async (req, res) => {
 

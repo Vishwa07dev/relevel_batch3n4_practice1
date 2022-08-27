@@ -1,7 +1,4 @@
-const constants = require('../utils/constants');
 const Company = require('../models/company.model');
-const { isAdmin } = require('../middlewares/auth.jwt');
-
 
 exports.createCompany = async (req, res) => {
 
@@ -27,6 +24,23 @@ exports.createCompany = async (req, res) => {
     }
 }
 
+
+exports.getAllCompanies = async (req, res) => {
+
+    try {
+
+        const companies = await Company.find();
+
+        res.status(200).send(companies);
+    } catch (err) {
+
+        console.log("some error while fetching all companies", err.message);
+        res.status(500).send({
+            message : "Some internal error "
+        });
+    }
+    
+}
 
 exports.updateCompany = async (req, res) => {
     try {
