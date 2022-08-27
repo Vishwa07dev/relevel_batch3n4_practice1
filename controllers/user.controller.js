@@ -7,6 +7,7 @@ const {
   filterUserSetResponse,
   filterUserResponse,
 } = require("../utils/objectConverter");
+
 const { userTypes } = require("../utils/constants");
 
 //get all the list of the users
@@ -38,11 +39,9 @@ exports.findAllUsers = async (req, res) => {
 //get a single user based on userId
 exports.findByUserId = async (req, res) => {
   try {
-    const user = await User.findOne({ userId: req.params.id });
-
-    // user validation would have happened in the middleware itself
+    // user validation happened in the middleware itself and which user to find is  binded already in req.user after passing isValidUserIdInReqParam middleware,so no need to call db again
     return res.status(200).json({
-      data: filterUserResponse(user),
+      data: filterUserResponse(req.user),
     });
   } catch (error) {
     console.error("Error while searching the user ", error.message);
@@ -57,35 +56,33 @@ exports.findByUserId = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     //isAdminOrOwner already checked in the middleware
-    //get the userdetails which to be updated
-    const user = await User.findOne({ userId: req.params.id });
-    //check if currently SignIn user ,userType is Admin(and having approvedUserStatus), then only allow the User to update UserStatus otherwise,keep userStatus remain same
-    if (req.body.userStatus) {
-      const signedInUser = await User.findOne({ userId: req.userId });
-      if (signedInUser.userType === userTypes.admin) {
-        user.userStatus = req.body.userStatus;
-      }
+    //get the userdetails which to be updated , which is already binded in req.user in isValidUserIdInReqParam middleware(if passed)
+
+    //check if userStatus is provided to be updated , as admin only allowed this update, so checking the req.isAdmin also,then only updating the userStatus
+    if (req.body.userStatus && req.isAdmin) {
+      req.user.userStatus = req.body.userStatus;
     }
-    //name,company update is allowed
+
+    //name,company update is allowed to the owner
     if (req.body.name) {
       //update user name
-      user.name = req.body.name;
+      req.user.name = req.body.name;
     }
     if (req.body.companyId) {
       //update the company
-      //ensure whether the given companyID is valid companyId, already done in middleware
-      user.companyId = req.body.companyId;
+      //ensure whether the given companyID is valid companyId, already done in middleware and req.company is binded in validateUserUpdateRequestBody middleware
+      req.user.companyId = req.body.companyId;
 
-      //also update in the compnay hrs list
-      const company = await Company.findOne({ _id: req.body.companyId });
-      //if user is not already in the compnay hrs list,then only push
-      if (!company.hrs.includes(user._id)) {
-        company.hrs.push(user._id);
-        await company.save();
+      //also update in the company hrs list
+
+      //if user is not already in the company hrs list,then only push
+      if (!req.company.hrs.includes(req.user._id)) {
+        req.company.hrs.push(req.user._id);
+        await req.company.save();
       }
     }
     //save the user in the db
-    const updatedUser = await user.save();
+    const updatedUser = await req.user.save();
 
     return res.status(200).json({
       message: "User updated successfully",

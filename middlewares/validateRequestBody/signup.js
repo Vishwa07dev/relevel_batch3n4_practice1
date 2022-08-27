@@ -6,7 +6,10 @@ const Company = require("../../models/company.model");
 const trimValuesInRequestBody = require("../../utils/trimRequestBody");
 const isValueUnique = require("../../utils/checkUniqueValueInModelDoc");
 
-const { userTypes } = require("../../utils/constants");
+const {
+  userTypes,
+  companyVerificationStatuses,
+} = require("../../utils/constants");
 
 exports.validateSignUpRequestBody = async (req, res, next) => {
   trimValuesInRequestBody(req); //to remove unwanted spaces
@@ -74,27 +77,32 @@ exports.validateSignUpRequestBody = async (req, res, next) => {
       });
     }
 
-    //ensure if the userType is hr, a correct CompanyId, must be provided (if provided, else later hrUser has to update the profile as companyId is required to post a job, in case user is HR)
-    if (req.body.userType == userTypes.hr && req.body.companyId) {
-      //companyId is provided, validate the companyId
-      //validate companyId is valid ObjectId or not
-      if (!isValidObjectId(req.body.companyId)) {
+    //ensure if the userType is hr, a correct CompanyId, must be provided, as without companyId, user registration as hr will be of no use.
+    if (req.body.userType == userTypes.hr) {
+      if (!req.body.companyId) {
         return res.status(400).json({
-          message: "Not a valid companyId.",
+          message: "CompanyId need to be provided for registration as HR.",
         });
-      }
-      //validate company exists in the db with the given companyId or not
-      const isCompanyNotExists = isValueUnique(Company, {
-        _id: req.body.companyId,
-      });
-      if (isCompanyNotExists instanceof Error) {
-        return res.status(500).json({
-          message: "Internal server error while validating the request",
-        });
-      } else if (isCompanyNotExists == true) {
-        return res.status(400).json({
-          message: "Not a valid companyId.",
-        });
+      } else {
+        //companyId is provided, validate the companyId
+        //validate companyId is valid ObjectId or not
+        if (!isValidObjectId(req.body.companyId)) {
+          return res.status(400).json({
+            message: "Not a valid companyId.",
+          });
+        }
+        //validate company exists in the db with the given companyId or not
+        const company = await Company.findOne({ _id: req.body.companyId });
+        if (!company) {
+          return res.status(400).json({
+            message: "Not a valid companyId.",
+          });
+        } else if (company.verified !== companyVerificationStatuses.approved) {
+          //validate company has approved status in verified
+          return res.status(400).json({
+            message: `Company provided is not verified yet.Only Company with approved status,Hr's allowed to do registration. Current status of company - ${company.verified}. Contact ADMIN for getting approved status.`,
+          });
+        }
       }
     }
   }

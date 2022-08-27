@@ -26,7 +26,7 @@ exports.signup = async (req, res) => {
   //if userType is provided, means the user may be other than default applicant type, so in this case, change the userStatus accordingly
   if (req.body.userType) {
     if (req.body.userType !== userTypes.applicant) {
-      userStatus = userStatuses.pending; //make userStatus as pending status, for the user other than applicantUser
+      userStatus = userStatuses.pending; //make userStatus as pending status, for the user other than applicantUser means a new admin user and hr user userStatus will be pending only
     }
   }
   const userObjectToStoredInDB = {
@@ -39,14 +39,14 @@ exports.signup = async (req, res) => {
   };
   //check if userType is hr, and valid company id is passed(companyId is already verified in the middleware),add it to the userObject
   if (req.body.userType === userTypes.hr && req.body.companyId) {
-    userObjectToStoredInDB;
+    userObjectToStoredInDB.companyId = req.body.companyId;
   }
   try {
     //create user
     let user = await User.create(userObjectToStoredInDB);
     console.log(user);
 
-    //if the user is hr and companyId is provided, then add current hr userId to the company list of hrs too
+    //if the user is hr  then add current hr userId to the company list of hrs too
     if (user.companyId) {
       const company = await Company.findOne({ _id: user.companyId });
       company.hrs.push(user._id); //push the current userId into company hrs list
@@ -54,8 +54,8 @@ exports.signup = async (req, res) => {
     }
 
     return res.status(201).json({
-      message: "User created successfully.",
       data: filterUserResponse(user),
+      message: "User created successfully.",
     });
   } catch (error) {
     console.log(error.message);
@@ -77,10 +77,10 @@ exports.signin = async (req, res) => {
         message: "UserId does not exist.Provide a valid userId to signIn.",
       });
     }
-    //user exists, now only allow user with APPROVED userStatus to continue,else return
+    //user exists, now only allow user with APPROVED userStatus to continue,else return  //since checking user apporved status here only, so no need to check again in the following requests as all Api's endpoints need access token to access except signin and signup requests.
     if (user.userStatus !== userStatuses.approved) {
       return res.status(400).json({
-        message: `UserStatus is not approved yet. Current userStatus is - ${user.userStatus}`,
+        message: `UserStatus is not approved. Current userStatus is - ${user.userStatus}.Contact ADMIN.`,
       });
     }
     //check whether the password matches against the password in the database for the user, to validate the user

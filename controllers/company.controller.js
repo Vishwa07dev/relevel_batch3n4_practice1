@@ -14,25 +14,28 @@ exports.create = async (req, res) => {
   }
   const company = await Company.create(companyObjectToStoredInDB);
   return res.status(201).json({
-    message: "Company created successfully",
     data: company,
+    message: "Company created successfully",
   });
 };
 
 exports.update = async (req, res) => {
   try {
-    const company = await Company.findOne({ _id: req.params.id });
+    // const company = await Company.findOne({ _id: req.params.id });
+    // const company = req.company;
     //update the company
-    company.name = req.body.name != undefined ? req.body.name : company.name;
-    company.address =
-      req.body.address != undefined ? req.body.address : company.address;
-    company.verified =
-      req.body.verified != undefined ? req.body.verified : company.verified;
+    //getting company details from the request body as it is binded to the request object after isValidCompanyIdInReqParam middleware is passed
+    req.company.name =
+      req.body.name != undefined ? req.body.name : req.company.name;
+    req.company.address =
+      req.body.address != undefined ? req.body.address : req.company.address;
+    req.company.verified =
+      req.body.verified != undefined ? req.body.verified : req.company.verified;
 
-    const updatedCompany = await company.save();
+    const updatedCompany = await req.company.save();
     return res.status(200).json({
-      message: "Company successfully updated.",
       data: updatedCompany,
+      message: "Company successfully updated.",
     });
   } catch (error) {
     console.log("Error while updating company", error.message);
@@ -59,9 +62,9 @@ exports.findAll = async (req, res) => {
 
 exports.findOne = async (req, res) => {
   try {
-    const company = await Company.findOne({ _id: req.params.id });
+    // const company = await Company.findOne({ _id: req.params.id });
     return res.status(200).json({
-      data: company,
+      data: req.company, //getting company from the request object
     });
   } catch (error) {
     console.log("Error while fetching company details.", error.message);

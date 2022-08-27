@@ -14,7 +14,7 @@ module.exports = (app) => {
   //create a company
   app.post(
     "/naukariService/api/v1/companies",
-    [validateCompanyRequestBody, verifyToken, isAdmin],
+    [verifyToken, isAdmin, validateCompanyRequestBody],
     companyController.create
   );
 

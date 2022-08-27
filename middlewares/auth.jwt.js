@@ -39,22 +39,24 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-//to validate the given userType is admin or not and userStatus is approved too,then only able to access
+//to validate the given userType is admin or not (approved status already checked as only approved user can signIN successfully and get the access token,and here only user with verifed token can come as previous middleware is verifyToken itself),then only able to access
 const isAdmin = async (req, res, next) => {
   try {
     const user = await User.findOne({
       userId: req.userId,
-      userStatus: userStatuses.approved,
+      userType: userTypes.admin,
     });
-    if (user && user.userType === userTypes.admin) {
-      //if userType is admin, pass the control to next
-      next();
-    } else {
-      //access not allowed
+    if (!user) {
+      //access not allowed as not admin
       return res.status(403).json({
         message:
           "No access allowed to the user for this requested endpoint. ADMIN WITH APPROVED STATUS only allowed",
       });
+    } else {
+      //means user is admin
+      //storing user info, may be used later in the pipeline, to avoid duplicate db calls
+      req.user = user;
+      next(); //pass the control
     }
   } catch (error) {
     console.error("Internal server error", error.message);
@@ -120,19 +122,20 @@ const isAdminOrHr = async (req, res, next) => {
 //user.userType==="ADMIN" -> for admin user
 //user.userId === req.userId;-> for owner user
 const isAdminOrOwner = async (req, res, next) => {
-  //to check whether user is approved admin or user is owner only,
+  //to check whether user is approved admin or user is owner user only,
   try {
     const signedInUser = await User.findOne({
       userId: req.userId,
     });
-    if (
-      signedInUser &&
-      ((signedInUser.userType === userTypes.admin &&
-        signedInUser.userStatus === userStatuses.approved) ||
-        signedInUser.userId === req.params.id)
-    ) {
-      //means the user is either admin(with approved status) or owner only
-      next(); //pass the control
+    //check the user is either admin(with approved status) or owner only
+    if (signedInUser) {
+      if (signedInUser.userType === userTypes.admin) {
+        //bind the isAdmin property to true,so later can allow the req having isAdmin property to true ,only to update userStatus and no need to call db again to check whether user is admin type
+        req.isAdmin = true;
+        next(); //pass the control
+      } else if (signedInUser.userId === req.params.id) {
+        next(); //pass the control
+      }
     } else {
       //not a valid user to access this endpoint
       return res.status(403).json({

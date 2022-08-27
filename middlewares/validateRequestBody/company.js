@@ -18,6 +18,7 @@ exports.validateCompanyRequestBody = async (req, res, next) => {
       message: "Address is required field and is not provided.",
     });
   }
+  //if admin wants , can pass verified status to approved, while registring the company itself or can approved later
   if (req.body.verified) {
     //if verified is provided in request body, then check whether a valid type is provided or not
     if (!isCompanyVerificationStatusValid(req.body.verified)) {

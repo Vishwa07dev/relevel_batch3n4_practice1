@@ -25,6 +25,8 @@ const isValidCompanyIdInReqParam = async (req, res, next) => {
       });
     }
     //valid companyId,pass the control to next
+    //can pass the company details, so can be used later in company updation and getting specific company detail
+    req.company = company;
     next();
   } catch (error) {
     console.log("Error while accessing the  info", error.message);
@@ -49,7 +51,8 @@ const isValidUserIdInReqParam = async (req, res, next) => {
         message: "UserId passed,doesn't exist.",
       });
     }
-    //userId exists,pass the control to next
+    //userId exists,pass the control to next,bind the user to req.user, so no need to call db again in controller
+    req.user = user;
     next();
   } catch (error) {
     console.log("Error while accessing the data", error.message);
