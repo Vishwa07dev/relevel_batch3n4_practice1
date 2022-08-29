@@ -86,7 +86,7 @@ exports.update = async (req, res) => {
 
     return res.status(200).json({
       message: "User updated successfully",
-      data: updatedUser,
+      data: filterUserResponse(updatedUser),
     });
   } catch (error) {
     console.log("Error while updating user", error.message);

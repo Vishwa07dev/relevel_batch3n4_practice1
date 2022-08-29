@@ -55,7 +55,6 @@ require("./routes/job.route")(app);
 //in case of endpoint ,not exists, send the 404 response
 app.use((req, res) => {
   res.status(404).json({
-    success: "false",
     message: "The requested endpoint doesn't exists.",
   });
 });

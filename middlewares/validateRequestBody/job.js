@@ -1,7 +1,10 @@
 //This middleware contains the logic for handling request bodies coming along with  requests realted to Job resource.
 
 const trimValuesInRequestBody = require("../../utils/trimRequestBody");
-const { jobStatuses } = require("../../utils/constants");
+const {
+  jobStatuses,
+  companyVerificationStatuses,
+} = require("../../utils/constants");
 const Company = require("../../models/company.model");
 const { isValidObjectId } = require("mongoose");
 
@@ -23,7 +26,7 @@ exports.validateJobRequestBody = async (req, res, next) => {
 
   //ensure if userid is admin, then admin must pass the valid companyId
   if (req.isAdmin == true) {
-    //ensure a valid companyId is paased by the admin user
+    //ensure a valid companyId is passed by the admin user
     const companyId = req.body.companyId;
     if (!companyId) {
       return res.status(400).json({
@@ -40,6 +43,11 @@ exports.validateJobRequestBody = async (req, res, next) => {
     if (company == null) {
       return res.status(400).json({
         message: "Not valid CompanyId.",
+      });
+    } else if (company.verified !== companyVerificationStatuses.approved) {
+      return res.status(400).json({
+        message:
+          "Company provided, current verified status is not approved.Only the company with approved status is allowed to create a job.",
       });
     } else {
       //bind the company to req, so to avoid db call

@@ -5,6 +5,10 @@ const User = require("../models/user.model");
 const Job = require("../models/job.model");
 const Company = require("../models/company.model");
 const { jobStatuses, userTypes, userStatuses } = require("../utils/constants");
+const {
+  filterJobResponseForApplicant,
+  filterJobsSetResponseForApplicant,
+} = require("../utils/objectConverter");
 
 exports.create = async (req, res) => {
   try {
@@ -38,7 +42,6 @@ exports.create = async (req, res) => {
     }
 
     return res.status(201).json({
-      successs: true,
       message: "Job created successfully",
       data: job,
     });
@@ -57,15 +60,21 @@ exports.findAll = async (req, res) => {
     if (req.query.status) {
       queryObj.status = req.query.status;
     }
-    let jobs = await Job.find(queryObj);
-
     const user = await User.findOne({ userId: req.userId });
+    let jobs;
+    if (user.userType == userTypes.hr) {
+      //find all the jobs related to company  to which hr belongs to
+      jobs = await Job.find({ ...queryObj, company: user.companyId });
+    } else {
+      jobs = await Job.find(queryObj);
+    }
 
     if (user.userType == userTypes.applicant) {
-      jobs = jobs.map((job) => {
-        return { ...job._doc, applicants: undefined };
-      });
-      //so applicant user cant know the ids of the other user
+      //filter the response to avoid the applicant getting details(ids)
+      jobs = await filterJobsSetResponseForApplicant(jobs);
+      if (jobs instanceof Error) {
+        throw jobs; //throw that error,so it will be catch
+      }
     }
     return res.status(200).json({
       documentResultsCount: jobs.length,
@@ -82,9 +91,12 @@ exports.findAll = async (req, res) => {
 exports.findOne = async (req, res) => {
   try {
     //exclude the all job.applicant id property detail only if req.userId is applicant
-
-    if (req.user.userType == userTypes.applicant) {
-      req.job.applicants = undefined; //so applicant user cant know the ids of the other user
+    const user = await User.findOne({ userId: req.userId });
+    if (user.userType == userTypes.applicant) {
+      req.job = await filterJobResponseForApplicant(req.job);
+      if (req.job instanceof Error) {
+        throw req.job; //throw that error,so it will be catch
+      }
     }
     return res.status(200).json({
       data: req.job,
@@ -130,23 +142,23 @@ exports.update = async (req, res) => {
           message:
             "Job status is not valid value.Allowed values are- ACTIVE AND EXPIRED.",
         });
-      } else {
-        //save the job
-        req.job.status = req.body.status;
-        req.job.title =
-          req.body.title !== undefined ? req.body.title : req.job.title;
-        req.job.description =
-          req.body.description !== undefined
-            ? req.body.description
-            : req.job.description;
-
-        const updatedJob = await req.job.save();
-        return res.status(200).json({
-          message: "Job updated is successfully done.",
-          data: updatedJob,
-        });
       }
     }
+    //save the job
+    req.job.status =
+      req.body.status !== undefined ? req.body.status : req.job.status;
+    req.job.title =
+      req.body.title !== undefined ? req.body.title : req.job.title;
+    req.job.description =
+      req.body.description !== undefined
+        ? req.body.description
+        : req.job.description;
+
+    const updatedJob = await req.job.save();
+    return res.status(200).json({
+      message: "Job updated is successfully done.",
+      data: updatedJob,
+    });
   } catch (error) {
     return res.status(500).json({
       message: "Some internal error occured.",

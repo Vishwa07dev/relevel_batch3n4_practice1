@@ -162,18 +162,9 @@ const isOwnerOrApplicantOrAdmin = async (req, res, next) => {
 
   if (signedInUser.userType === userTypes.hr) {
     //check whether the signedInUser is the hr and is the owner of the current job
-    if (job.postedBy !== signedInUser._id) {
-      return res.status(403).json({
-        message:
-          "Only the owner of this Job or Admin or Applicant with approved status is allowed to update the job.",
-      });
-    }
-  } else if (
-    signedInUser.userType === userTypes.applicant ||
-    signedInUser.userType === userTypes.admin
-  ) {
-    //applicant the user must be approved status
-    if (signedInUser.userStatus !== userStatuses.approved) {
+    if (String(job.postedBy) != String(signedInUser._id)) {
+      // console.log(String(job.postedBy) != String(signedInUser._id));
+
       return res.status(403).json({
         message:
           "Only the owner of this Job or Admin or Applicant with approved status is allowed to update the job.",
@@ -181,11 +172,10 @@ const isOwnerOrApplicantOrAdmin = async (req, res, next) => {
     }
   } else if (signedInUser.userType === userTypes.applicant) {
     //ensure whether the user applicant has been already applied for job, if true  then return from here only
-    const user = await User.findOne({ userId: req.userId });
-    if (job.applicants.includes(user._id)) {
+    if (job.applicants.includes(signedInUser._id)) {
       return res.status(400).json({
         message:
-          "Applicant user already has been applied for the job.You can't apply a single job again.",
+          "Applicant user already has been applied for the job.You can't apply a same job again.",
       });
     }
   }
