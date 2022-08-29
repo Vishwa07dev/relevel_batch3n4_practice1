@@ -3,5 +3,6 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 module.exports = {
-  DB_URI: process.env.DB_URI,
+  secret: process.env.JWT_SECRET_KEY,
+  expiryPeriod: process.env.JWT_EXPIRY_PERIOD,
 };
