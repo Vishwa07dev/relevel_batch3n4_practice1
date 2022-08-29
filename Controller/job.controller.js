@@ -27,6 +27,7 @@ exports.createJob = async (req, res) => {
       status: jobCreated.status,
       company: company.name,
     };
+
     res.status(201).send({
       message: "You have successfully created a new job",
       responseMessage,
@@ -120,22 +121,3 @@ exports.findAllJobs = async (req, res) => {
   }
 };
 
-// for  hr who wants to find job of their own postings or admin who wants to find job of a specific hr
-exports.findJobsPostedByHR = async (req, res) => {
-  let postedByID;
-  if (req.user.userType == constants.userTypes.admin) {
-    postedByID = req.params.id;
-  } else {
-    postedByID = req.user._id;
-  }
-  try {
-    let JobsDetail = await Job.find({ postedBy: postedByID });
-    return res.status(200).send(JobsDetail);
-  } catch {
-    return res
-      .status(500)
-      .send(
-        "An internal server error has occured please try again after a few seconds..."
-      );
-  }
-};
