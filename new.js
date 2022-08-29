@@ -64,4 +64,7 @@ const { default: mongoose } = require("mongoose");
 //   console.log(obj);
 // }
 
-// trial(array);
+// trial(array)
+
+
+

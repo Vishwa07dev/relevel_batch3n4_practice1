@@ -26,7 +26,8 @@ db.once("open", () => {
 
 require("./Route/userAuth.Route")(app);
 require("./Route/jobs.Route")(app);
-
+require("./Route/company.route")(app);
+require("./Route/approvals.route")(app);
 app.listen(serverConfig.PORT, () => {
   console.log("app is listening at port:", serverConfig.PORT);
 });

@@ -3,18 +3,23 @@ const { jwtAuth, jobMiddleware } = require("../middleware/index");
 
 module.exports = (app) => {
   app.post(
-    "/naukriApp/api/v1/jobCreation",
+    "/naukriApp/api/v1/jobs",
     [jwtAuth.verifyJWT, jobMiddleware.create],
     jobController.createJob
   );
   app.get(
-    "/naukriApp/api/v1/findnecessaryJobDetails",
+    "/naukriApp/api/v1/JobDetails",
     [jwtAuth.verifyJWT],
     jobController.findAllNecessaryJobDetails
   );
-  app.get(
-    "/naukriApp/api/v1/applyForJob/:id",
+  app.put(
+    "/naukriApp/api/v1/applyJobs/:id",
     [jwtAuth.verifyJWT, jobMiddleware.applyForJob],
     jobController.applyForJob
+  );
+  app.get(
+    "/naukriApp/api/v1/allJobs",
+    [jwtAuth.verifyJWT, jwtAuth.isAdmin],
+    jobController.findAllJobs
   );
 };

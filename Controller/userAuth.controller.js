@@ -31,7 +31,7 @@ exports.registration = async (req, res) => {
       userStatus: newUser.userStatus,
       CreatedAt: newUser.createdAt,
     };
-    res.status(200).send(response);
+    res.status(201).send(response);
   } catch (err) {
     res.status(500).send("Db Error while registering new user");
     console.log(err);

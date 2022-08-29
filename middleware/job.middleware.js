@@ -50,8 +50,19 @@ exports.create = async (req, res, next) => {
         );
     }
   }
+  // check wether the company is in active state
+
   // if hr tries to provide a body.id
+  let companyExists;
   if (req.user.userType == constants.userTypes.hr) {
+    try {
+      companyExists = await Company.findOne({ _id: req.user.companyId });
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(500)
+        .send("Internal server error please try again later");
+    }
     req.body.id = undefined;
   }
   // title
@@ -124,8 +135,10 @@ exports.create = async (req, res, next) => {
   } else {
     req.body.status = constants.jobStatuses.active;
   }
+  req.company = companyExists;
   next();
 };
+
 exports.applyForJob = async (req, res, next) => {
   // is it an applicantt
   if (req.user.userType != constants.userTypes.applicant) {
@@ -166,6 +179,7 @@ exports.applyForJob = async (req, res, next) => {
     if (req.user.jobsApplied.includes(req.params.id)) {
       return res.status(400).send("You have already applied for this job, ");
     }
+    req.job = doesJobExist;
     next();
   } catch (err) {
     console.log(err);

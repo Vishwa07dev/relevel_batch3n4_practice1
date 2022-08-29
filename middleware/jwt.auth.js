@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const serverConfig = require("../configs/server.config");
 const jwt = require("jsonwebtoken");
+const constants = require("../utils/constants");
 exports.verifyJWT = async (req, res, next) => {
   // check if token exists
   const token = req.headers["x-access-token"];
@@ -29,4 +30,14 @@ exports.verifyJWT = async (req, res, next) => {
       .status(500)
       .send("An internal server error has occured please try again later");
   }
+};
+
+exports.isAdmin = async (req, res, next) => {
+  if (req.user.userType !== constants.userTypes.admin) {
+    res.status(400).send("You are not authorized for this request");
+  }
+  if (req.user.userStatus !== constants.userStatuses.approved) {
+    res.status(400).send("You are not yet approved for this request");
+  }
+  next();
 };

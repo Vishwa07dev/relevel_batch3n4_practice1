@@ -18,7 +18,7 @@ exports.createJob = async (req, res) => {
   };
   try {
     let jobCreated = await Job.create(newJobDetails);
-    let company = await Company.findOne({ _id: companyId });
+    let company = req.company;
     company.jobsPosted.push(jobCreated._id);
     await company.save();
     let responseMessage = {
@@ -27,7 +27,7 @@ exports.createJob = async (req, res) => {
       status: jobCreated.status,
       company: company.name,
     };
-    res.status(200).send({
+    res.status(201).send({
       message: "You have successfully created a new job",
       responseMessage,
     });
@@ -77,7 +77,7 @@ exports.findAllNecessaryJobDetails = async (req, res) => {
 // applicants applying for job
 exports.applyForJob = async (req, res) => {
   try {
-    const job = await Job.findOne({ _id: req.params.id });
+    const job = req.job;
     console.log(job);
     console.log(job.applicants);
     job.applicants.push(req.user._id);
@@ -91,7 +91,7 @@ exports.applyForJob = async (req, res) => {
       description: await job.description,
       companyName: await company.name,
     };
-    res.status(200).send({
+    res.status(204).send({
       message: "successfully applied to the job",
       details: jobAppliedDetails,
     });
