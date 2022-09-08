@@ -20,4 +20,9 @@ module.exports = {
     active: "ACTIVE",
     expired: "EXPIRED",
   },
+  nameCheck: /^[a-zA-Z]+$/,
+  emailRegex:
+    /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+  passwordCheck:
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i, //Minimum eight characters, at least one uppercase letter, one lowercase letter and one number
 };
